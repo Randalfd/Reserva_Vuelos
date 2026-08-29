@@ -33,7 +33,7 @@ public class AirlineController {
         return airlineService.updateAirline(airline, id);
     }
 
-    @DeleteMapping("/api/airline/id")
+    @DeleteMapping("/api/airline/{id}")
     public void removeAirline(@PathVariable Long id) {
         airlineService.removeAirline(id);
     }
