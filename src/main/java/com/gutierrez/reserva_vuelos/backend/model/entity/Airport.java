@@ -17,8 +17,7 @@ public class Airport {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private String ICAO;
+    private String icao;
     private String address;
     private String city;
-
 }
