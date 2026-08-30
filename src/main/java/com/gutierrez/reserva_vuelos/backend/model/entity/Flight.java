@@ -29,7 +29,7 @@ public class Flight {
 
    private double amount;
    private LocalDate departure;
-   private LocalDate arrive;
+   private LocalDate arrival;
 
    @ManyToOne
    @JoinColumn(name = "airline_id")

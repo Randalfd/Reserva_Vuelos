@@ -31,7 +31,7 @@ public class FlightServiceImpl implements FlightService {
     public Flight saveFlight(Flight flight) {
         LocalDate today = LocalDate.now();
 
-        if(flight.getArrive().isBefore(today)) {
+        if(flight.getArrival().isBefore(today)) {
             throw new FlightInvalidDateExeption("La fecha de llegada no puede ser menor a la fecha actual");
         }
 
@@ -52,7 +52,7 @@ public class FlightServiceImpl implements FlightService {
 
         LocalDate today = LocalDate.now();
 
-        if(flight.getArrive().isBefore(today)) {
+        if(flight.getArrival().isBefore(today)) {
             throw new FlightInvalidDateExeption("La fecha de llegada no puede ser menor a la fecha actual");
         }
 
@@ -76,8 +76,8 @@ public class FlightServiceImpl implements FlightService {
             savedFlight.setDestination_airport(flight.getDestination_airport());
         }
 
-        if(Objects.nonNull(flight.getArrive())) {
-            savedFlight.setArrive(flight.getArrive());
+        if(Objects.nonNull(flight.getArrival())) {
+            savedFlight.setArrival(flight.getArrival());
         }
 
         if(Objects.nonNull(flight.getDeparture())) {
