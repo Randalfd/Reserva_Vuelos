@@ -91,4 +91,9 @@ public class FlightServiceImpl implements FlightService {
     public void removeFlight(Long id) {
         flightRepository.deleteById(id);
     }
+
+    @Override
+    public List<Flight> findByOrderByDepartureDesc() {
+        return flightRepository.findByOrderByDepartureDesc();
+    }
 }

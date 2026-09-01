@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class AirlineController {
@@ -13,6 +14,7 @@ public class AirlineController {
     @Autowired
     AirlineService airlineService;
 
+    // CRUD Endpoints
     @GetMapping("/api/airline")
     public List<Airline> findAllAirlines() {
         return airlineService.findAllAirlines();
@@ -36,5 +38,11 @@ public class AirlineController {
     @DeleteMapping("/api/airline/{id}")
     public void removeAirline(@PathVariable Long id) {
         airlineService.removeAirline(id);
+    }
+
+    // Custom Endpoints
+    @GetMapping("/api/airline/search{name}")
+    public Optional<Airline> findByName(@RequestParam String name) {
+        return airlineService.findByName(name);
     }
 }

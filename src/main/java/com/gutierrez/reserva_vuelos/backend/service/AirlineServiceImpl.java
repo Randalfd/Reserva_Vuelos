@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class AirlineServiceImpl implements AirlineService {
@@ -48,5 +49,10 @@ public class AirlineServiceImpl implements AirlineService {
     @Override
     public void removeAirline(Long id) {
         airlineRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Airline> findByName(String name) {
+        return airlineRepository.findByName(name);
     }
 }

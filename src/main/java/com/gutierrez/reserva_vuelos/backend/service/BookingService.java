@@ -3,6 +3,7 @@ package com.gutierrez.reserva_vuelos.backend.service;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Booking;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookingService {
    List<Booking> findAllBookings();

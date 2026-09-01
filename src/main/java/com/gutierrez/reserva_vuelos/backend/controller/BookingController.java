@@ -1,11 +1,13 @@
 package com.gutierrez.reserva_vuelos.backend.controller;
 
 import com.gutierrez.reserva_vuelos.backend.model.entity.Booking;
+import com.gutierrez.reserva_vuelos.backend.model.entity.Passenger;
 import com.gutierrez.reserva_vuelos.backend.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class BookingController {
@@ -13,6 +15,7 @@ public class BookingController {
     @Autowired
     BookingService bookingService;
 
+    // CRUD Endopoints
     @GetMapping("/api/booking")
     public List<Booking> findAllBookings(){
         return bookingService.findAllBookings();
@@ -37,4 +40,6 @@ public class BookingController {
     public void removeBooking(@PathVariable Long id) {
         bookingService.remove(id);
     }
+
+    // Custom Endpoints
 }

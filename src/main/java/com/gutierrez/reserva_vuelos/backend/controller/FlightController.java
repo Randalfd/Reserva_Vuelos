@@ -39,4 +39,8 @@ public class FlightController {
         flightService.removeFlight(id);
     }
 
+    @GetMapping("/api/flight/sort")
+    public List<Flight> findByOrderByDepartureDesc() {
+       return flightService.findByOrderByDepartureDesc();
+    }
 }
