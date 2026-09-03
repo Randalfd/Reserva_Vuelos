@@ -1,17 +1,16 @@
 package com.gutierrez.reserva_vuelos.backend.service;
 
+import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundExeption;
 import com.gutierrez.reserva_vuelos.backend.mapper.AirlineMapper;
 import com.gutierrez.reserva_vuelos.backend.model.dto.AirlineDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airline;
 import com.gutierrez.reserva_vuelos.backend.respository.AirlineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AirlineServiceImpl implements AirlineService {
@@ -24,16 +23,17 @@ public class AirlineServiceImpl implements AirlineService {
 
     @Override
     public List<AirlineDto> findAllAirlines() {
-        List<AirlineDto> airlineDtos = airlineRepository.findAll().
+        return airlineRepository.findAll().
                 stream().
-                map( airline -> airlineMapper.airlineToAirlineDto(airline))
-                .collect(Collectors.toList());
-        return airlineDtos;
+                map(airlineMapper::airlineToAirlineDto).
+                toList();
     }
 
     @Override
     public AirlineDto findAirlineById(Long id) {
-       return airlineMapper.airlineToAirlineDto(airlineRepository.findById(id).get());
+       return airlineRepository.findById(id).
+               map(airlineMapper::airlineToAirlineDto).
+               orElseThrow( () -> new ResourceNotFoundExeption("Airline Not Found"));
     }
 
     @Override
