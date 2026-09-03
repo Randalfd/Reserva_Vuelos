@@ -9,8 +9,8 @@ import java.util.Optional;
 public interface AirlineService {
     List<AirlineDto> findAllAirlines();
     AirlineDto findAirlineById(Long id);
-    AirlineDto saveAirline(AirlineDto airlineDto);
-    AirlineDto updateAirline(AirlineDto airlineDto, Long id);
+    AirlineDto saveAirline(AirlineDto airline);
+    AirlineDto updateAirline(AirlineDto airline, Long id);
     void removeAirline(Long id);
     Optional<AirlineDto> findByName(String name);
 

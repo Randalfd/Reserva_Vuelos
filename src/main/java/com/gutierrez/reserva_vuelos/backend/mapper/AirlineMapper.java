@@ -4,16 +4,13 @@ import com.gutierrez.reserva_vuelos.backend.model.dto.AirlineDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airline;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = AirportMapper.class)
 public interface AirlineMapper {
-
-    AirlineMapper INSTANCE = Mappers.getMapper( AirlineMapper.class );
-
-    @Mapping(source = "phone", target = "contact_phone" )
+    @Mapping(source = "phone", target = "contactPhone" )
+    @Mapping(source = "airport.id", target = "airportId")
     AirlineDto airlineToAirlineDto(Airline airline);
 
-    @Mapping(source = "contact_phone", target = "phone" )
+    @Mapping(source = "contactPhone", target = "phone" )
     Airline airlineDtoToAirline(AirlineDto airlineDto);
 }
