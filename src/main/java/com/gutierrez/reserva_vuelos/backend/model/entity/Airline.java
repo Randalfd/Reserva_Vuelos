@@ -21,4 +21,6 @@ public class Airline {
     @ManyToOne
     @JoinColumn(name = "airport_id")
     private Airport airport;
+    private String email;
+    private String phone;
 }

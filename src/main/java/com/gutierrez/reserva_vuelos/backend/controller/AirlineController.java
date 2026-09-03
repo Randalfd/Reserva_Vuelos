@@ -1,5 +1,6 @@
 package com.gutierrez.reserva_vuelos.backend.controller;
 
+import com.gutierrez.reserva_vuelos.backend.model.dto.AirlineDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airline;
 import com.gutierrez.reserva_vuelos.backend.service.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,23 +17,23 @@ public class AirlineController {
 
     // CRUD Endpoints
     @GetMapping("/api/airline")
-    public List<Airline> findAllAirlines() {
+    public List<AirlineDto> findAllAirlines() {
         return airlineService.findAllAirlines();
     }
 
     @GetMapping("/api/airline/{id}")
-    public Airline findAirlineById(@PathVariable Long id) {
+    public AirlineDto findAirlineById(@PathVariable Long id) {
         return airlineService.findAirlineById(id);
     }
 
     @PostMapping("/api/airline")
-    public Airline saveAirline(@RequestBody Airline airline) {
-        return airlineService.saveAirline(airline);
+    public AirlineDto saveAirline(@RequestBody AirlineDto airlineDto) {
+        return airlineService.saveAirline(airlineDto);
     }
 
     @PutMapping("/api/airline/{id}")
-    public Airline updateAirline(@RequestBody Airline airline, @PathVariable Long id) {
-        return airlineService.updateAirline(airline, id);
+    public AirlineDto updateAirline(@RequestBody AirlineDto airlineDto, @PathVariable Long id) {
+        return airlineService.updateAirline(airlineDto, id);
     }
 
     @DeleteMapping("/api/airline/{id}")
@@ -42,7 +43,7 @@ public class AirlineController {
 
     // Custom Endpoints
     @GetMapping("/api/airline/search{name}")
-    public Optional<Airline> findByName(@RequestParam String name) {
+    public Optional<AirlineDto> findByName(@RequestParam String name) {
         return airlineService.findByName(name);
     }
 }

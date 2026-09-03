@@ -1,5 +1,7 @@
 package com.gutierrez.reserva_vuelos.backend.service;
 
+import com.gutierrez.reserva_vuelos.backend.mapper.AirlineMapper;
+import com.gutierrez.reserva_vuelos.backend.model.dto.AirlineDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airline;
 import com.gutierrez.reserva_vuelos.backend.respository.AirlineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AirlineServiceImpl implements AirlineService {
@@ -16,24 +19,33 @@ public class AirlineServiceImpl implements AirlineService {
     @Autowired
     AirlineRepository airlineRepository;
 
+    @Autowired
+    AirlineMapper airlineMapper;
+
     @Override
-    public List<Airline> findAllAirlines() {
-        return airlineRepository.findAll();
+    public List<AirlineDto> findAllAirlines() {
+        List<AirlineDto> airlineDtos = airlineRepository.findAll().
+                stream().
+                map( airline -> airlineMapper.airlineToAirlineDto(airline))
+                .collect(Collectors.toList());
+        return airlineDtos;
     }
 
     @Override
-    public Airline findAirlineById(Long id) {
-        return airlineRepository.findById(id).get();
+    public AirlineDto findAirlineById(Long id) {
+       return airlineMapper.airlineToAirlineDto(airlineRepository.findById(id).get());
     }
 
     @Override
-    public Airline saveAirline(Airline airline) {
-        return airlineRepository.save(airline);
+    public AirlineDto saveAirline(AirlineDto airlineDto) {
+        Airline airline = airlineMapper.airlineDtoToAirline(airlineDto);
+        return airlineMapper.airlineToAirlineDto(airlineRepository.save(airline));
     }
 
     @Override
-    public Airline updateAirline(Airline airline, Long id) {
+    public AirlineDto updateAirline(AirlineDto airlineDto, Long id) {
         Airline savedAirline = airlineRepository.findById(id).get();
+        Airline airline = airlineMapper.airlineDtoToAirline(airlineDto);
 
         if (Objects.nonNull(airline.getAirport())) {
             savedAirline.setAirport(airline.getAirport());
@@ -43,7 +55,15 @@ public class AirlineServiceImpl implements AirlineService {
             savedAirline.setName(airline.getName());
         }
 
-        return airlineRepository.save(savedAirline);
+        if (Objects.nonNull(airline.getEmail()) && !"".equalsIgnoreCase(airline.getEmail())) {
+            savedAirline.setEmail(airline.getEmail());
+        }
+
+        if (Objects.nonNull(airline.getPhone()) && !"".equalsIgnoreCase(airline.getPhone())) {
+            savedAirline.setPhone(airline.getPhone());
+        }
+
+        return airlineMapper.airlineToAirlineDto(airlineRepository.save(savedAirline));
     }
 
     @Override
@@ -52,7 +72,7 @@ public class AirlineServiceImpl implements AirlineService {
     }
 
     @Override
-    public Optional<Airline> findByName(String name) {
-        return airlineRepository.findByName(name);
+    public Optional<AirlineDto> findByName(String name) {
+        return Optional.ofNullable(airlineMapper.airlineToAirlineDto(airlineRepository.findByName(name).get()));
     }
 }
