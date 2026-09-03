@@ -1,5 +1,8 @@
 package com.gutierrez.reserva_vuelos.backend.service;
 
+import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundExeption;
+import com.gutierrez.reserva_vuelos.backend.mapper.AirportMapper;
+import com.gutierrez.reserva_vuelos.backend.model.dto.AirportDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airport;
 import com.gutierrez.reserva_vuelos.backend.respository.AirportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,24 +16,34 @@ public class AirportServiceImpl implements AirportService {
     @Autowired
     AirportRepository airportRepository;
 
+    @Autowired
+    AirportMapper airportMapper;
+
     @Override
-    public List<Airport> findAllAirports() {
-        return airportRepository.findAll();
+    public List<AirportDto> findAllAirports() {
+        return airportRepository.findAll().
+                stream().
+                map(airportMapper::airportToAriportDTO).
+                toList();
     }
 
     @Override
-    public Airport findAirportById(Long id) {
-        return airportRepository.findById(id).get();
+    public AirportDto findAirportById(Long id) {
+        return airportRepository.findById(id).
+                map(airportMapper::airportToAriportDTO).
+                orElseThrow(() -> new ResourceNotFoundExeption("Airport Not Found"));
     }
 
     @Override
-    public Airport saveAirport(Airport airport) {
-        return airportRepository.save(airport);
+    public AirportDto saveAirport(AirportDto airportDto) {
+        Airport airport = airportMapper.airportDtoToAirport(airportDto) ;
+        return airportMapper.airportToAriportDTO(airportRepository.save(airport));
     }
 
     @Override
-    public Airport updateAirport(Airport airport, Long id) {
+    public AirportDto updateAirport(AirportDto airportDto, Long id) {
         Airport savedAirport = airportRepository.findById(id).get();
+        Airport airport = airportMapper.airportDtoToAirport(airportDto);
 
         if(Objects.nonNull(airport.getName()) && !"".equalsIgnoreCase(airport.getName())) {
             savedAirport.setName(airport.getName());
@@ -48,7 +61,7 @@ public class AirportServiceImpl implements AirportService {
             savedAirport.setIcao(airport.getIcao());
         }
 
-        return airportRepository.save(savedAirport);
+        return airportMapper.airportToAriportDTO(airportRepository.save(savedAirport));
     }
 
     @Override

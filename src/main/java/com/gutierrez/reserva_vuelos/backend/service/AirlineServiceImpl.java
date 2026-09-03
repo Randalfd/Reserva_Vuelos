@@ -1,10 +1,13 @@
-package com.gutierrez.reserva_vuelos.backend.service;
+package com.gutierrez.reserva_vuelos.backend.serviceairportSe;
 
 import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundExeption;
 import com.gutierrez.reserva_vuelos.backend.mapper.AirlineMapper;
+import com.gutierrez.reserva_vuelos.backend.mapper.AirportMapper;
 import com.gutierrez.reserva_vuelos.backend.model.dto.AirlineDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airline;
+import com.gutierrez.reserva_vuelos.backend.model.entity.Airport;
 import com.gutierrez.reserva_vuelos.backend.respository.AirlineRepository;
+import com.gutierrez.reserva_vuelos.backend.service.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
