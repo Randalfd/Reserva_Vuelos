@@ -1,5 +1,6 @@
 package com.gutierrez.reserva_vuelos.backend.controller;
 
+import com.gutierrez.reserva_vuelos.backend.model.dto.PassengerDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Passenger;
 import com.gutierrez.reserva_vuelos.backend.service.PassengerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +15,22 @@ public class PassengerController {
     PassengerService passengerService;
 
     @GetMapping("/api/passenger")
-    public List<Passenger> findAllPassenger() {
+    public List<PassengerDto> findAllPassenger() {
         return passengerService.findAllPassenger();
     }
 
     @GetMapping("/api/passenger/{id}")
-    public Passenger findPassengerById(@PathVariable Long id) {
+    public PassengerDto findPassengerById(@PathVariable Long id) {
         return passengerService.findPassengerById(id);
     }
 
     @PostMapping("/api/passenger")
-    public Passenger savePassenger(@RequestBody Passenger passenger) {
+    public PassengerDto savePassenger(@RequestBody PassengerDto passenger) {
         return passengerService.savePassenger(passenger);
     }
 
     @PutMapping("/api/passenger/{id}")
-    public Passenger updatePassenger(@RequestBody Passenger passenger, @PathVariable Long id) {
+    public PassengerDto updatePassenger(@RequestBody PassengerDto passenger, @PathVariable Long id) {
         return passengerService.updatePassenger(passenger, id);
     }
 

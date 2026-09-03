@@ -1,5 +1,8 @@
 package com.gutierrez.reserva_vuelos.backend.service;
 
+import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundExeption;
+import com.gutierrez.reserva_vuelos.backend.mapper.PassengerMapper;
+import com.gutierrez.reserva_vuelos.backend.model.dto.PassengerDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Passenger;
 import com.gutierrez.reserva_vuelos.backend.respository.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,24 +17,31 @@ public class PassengerServiceImpl implements PassengerService{
     @Autowired
     PassengerRepository passengerRepository;
 
+    @Autowired
+    PassengerMapper passengerMapper;
     @Override
-    public List<Passenger> findAllPassenger() {
-        return passengerRepository.findAll();
+    public List<PassengerDto> findAllPassenger() {
+        return passengerRepository.findAll().
+                stream().
+                map(passengerMapper::passengerTopassengerDto).
+                toList();
     }
 
     @Override
-    public Passenger findPassengerById(Long id) {
-        return passengerRepository.findById(id).get();
+    public PassengerDto findPassengerById(Long id) {
+        return passengerRepository.findById(id).map(passengerMapper::passengerTopassengerDto).orElseThrow(() -> new ResourceNotFoundExeption("Passenger Not Found"));
     }
 
     @Override
-    public Passenger savePassenger(Passenger passenger) {
-        return passengerRepository.save(passenger);
+    public PassengerDto savePassenger(PassengerDto passengerDto) {
+        Passenger passenger = passengerMapper.passengerDtoToPassenger(passengerDto);
+        return passengerMapper.passengerTopassengerDto(passengerRepository.save(passenger));
     }
 
     @Override
-    public Passenger updatePassenger(Passenger passenger, Long id) {
-        Passenger savedPassenger = passengerRepository.findById(id).get();
+    public PassengerDto updatePassenger(PassengerDto passengerDto, Long id) {
+        Passenger savedPassenger = passengerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundExeption("Passenger Not Found"));
+        Passenger passenger = passengerMapper.passengerDtoToPassenger(passengerDto);
 
         if(Objects.nonNull(passenger.getFirstname()) && !"".equalsIgnoreCase(passenger.getFirstname())) {
             savedPassenger.setFirstname(passenger.getFirstname());
@@ -45,7 +55,7 @@ public class PassengerServiceImpl implements PassengerService{
             savedPassenger.setEmail(passenger.getEmail());
         }
 
-        return passengerRepository.save(savedPassenger);
+        return passengerMapper.passengerTopassengerDto(passengerRepository.save(savedPassenger));
     }
 
     @Override

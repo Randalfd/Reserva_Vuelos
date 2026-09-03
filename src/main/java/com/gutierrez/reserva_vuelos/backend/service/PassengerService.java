@@ -1,13 +1,13 @@
 package com.gutierrez.reserva_vuelos.backend.service;
 
-import com.gutierrez.reserva_vuelos.backend.model.entity.Passenger;
+import com.gutierrez.reserva_vuelos.backend.model.dto.PassengerDto;
 
 import java.util.List;
 
 public interface PassengerService {
-    List<Passenger> findAllPassenger();
-    Passenger findPassengerById(Long id);
-    Passenger savePassenger(Passenger passenger);
-    Passenger updatePassenger(Passenger passenger, Long id);
+    List<PassengerDto> findAllPassenger();
+    PassengerDto findPassengerById(Long id);
+    PassengerDto savePassenger(PassengerDto passengerDto);
+    PassengerDto updatePassenger(PassengerDto passengerDto, Long id);
     void removePassenger(Long id);
 }
