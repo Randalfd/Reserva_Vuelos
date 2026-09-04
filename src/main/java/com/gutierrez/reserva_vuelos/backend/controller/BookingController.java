@@ -1,5 +1,6 @@
 package com.gutierrez.reserva_vuelos.backend.controller;
 
+import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.model.dto.BookingDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Booking;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Passenger;
@@ -23,24 +24,23 @@ public class BookingController {
     }
 
     @GetMapping("/api/booking/{id}")
-    public BookingDto findBookingById(@PathVariable Long id) {
+    public BookingDto findBookingById(@PathVariable Long id) throws ResourceNotFoundException {
         return bookingService.findBookingsById(id);
     }
 
     @PostMapping("/api/booking")
-    public BookingDto saveBooking(@RequestBody BookingDto bookingDto) {
+    public BookingDto saveBooking(@RequestBody BookingDto bookingDto) throws ResourceNotFoundException {
         return bookingService.save(bookingDto);
     }
 
     @PutMapping("/api/booking/{id}")
-    public BookingDto updateBooking(@RequestBody BookingDto bookingDto, @PathVariable Long id) {
+    public BookingDto updateBooking(@RequestBody BookingDto bookingDto, @PathVariable Long id) throws ResourceNotFoundException {
         return bookingService.update(bookingDto,id);
     }
 
     @DeleteMapping("/api/booking/{id}")
-    public void removeBooking(@PathVariable Long id) {
+    public void removeBooking(@PathVariable Long id) throws ResourceNotFoundException {
         bookingService.remove(id);
     }
 
-    // Custom Endpoints
 }
