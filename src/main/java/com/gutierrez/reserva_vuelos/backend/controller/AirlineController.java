@@ -1,7 +1,7 @@
 package com.gutierrez.reserva_vuelos.backend.controller;
 
+import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.model.dto.AirlineDto;
-import com.gutierrez.reserva_vuelos.backend.model.entity.Airline;
 import com.gutierrez.reserva_vuelos.backend.service.AirlineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,28 +22,28 @@ public class AirlineController {
     }
 
     @GetMapping("/api/airline/{id}")
-    public AirlineDto findAirlineById(@PathVariable Long id) {
+    public AirlineDto findAirlineById(@PathVariable Long id) throws ResourceNotFoundException{
         return airlineService.findAirlineById(id);
     }
 
     @PostMapping("/api/airline")
-    public AirlineDto saveAirline(@RequestBody AirlineDto airlineDto) {
+    public AirlineDto saveAirline(@RequestBody AirlineDto airlineDto) throws ResourceNotFoundException {
         return airlineService.saveAirline(airlineDto);
     }
 
     @PutMapping("/api/airline/{id}")
-    public AirlineDto updateAirline(@RequestBody AirlineDto airlineDto, @PathVariable Long id) {
+    public AirlineDto updateAirline(@RequestBody AirlineDto airlineDto, @PathVariable Long id) throws ResourceNotFoundException{
         return airlineService.updateAirline(airlineDto, id);
     }
 
     @DeleteMapping("/api/airline/{id}")
-    public void removeAirline(@PathVariable Long id) {
+    public void removeAirline(@PathVariable Long id) throws ResourceNotFoundException {
         airlineService.removeAirline(id);
     }
 
     // Custom Endpoints
     @GetMapping("/api/airline/search{name}")
-    public Optional<AirlineDto> findByName(@RequestParam String name) {
+    public AirlineDto findByName(@RequestParam String name) throws ResourceNotFoundException {
         return airlineService.findByName(name);
     }
 }

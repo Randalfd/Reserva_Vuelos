@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-09-03T21:37:29-0300",
+    date = "2026-09-04T18:35:46-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.12.1 (Eclipse Adoptium)"
 )
 @Component
@@ -22,25 +22,16 @@ public class FlightMapperImpl implements FlightMapper {
             return null;
         }
 
-        long originAirportId = 0L;
-        long destinationAirportId = 0L;
-        long airlineId = 0L;
+        Long originAirportId = null;
+        Long destinationAirportId = null;
+        Long airlineId = null;
         double price = 0.0d;
         LocalDate arrival = null;
         LocalDate departure = null;
 
-        Long id = flightOriginAirportId( flight );
-        if ( id != null ) {
-            originAirportId = id;
-        }
-        Long id1 = flightDestinationAirportId( flight );
-        if ( id1 != null ) {
-            destinationAirportId = id1;
-        }
-        Long id2 = flightAirlineId( flight );
-        if ( id2 != null ) {
-            airlineId = id2;
-        }
+        originAirportId = flightOriginAirportId( flight );
+        destinationAirportId = flightDestinationAirportId( flight );
+        airlineId = flightAirlineId( flight );
         price = flight.getPrice();
         arrival = flight.getArrival();
         departure = flight.getDeparture();

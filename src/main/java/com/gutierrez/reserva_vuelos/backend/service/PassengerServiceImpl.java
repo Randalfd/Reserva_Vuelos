@@ -1,6 +1,6 @@
 package com.gutierrez.reserva_vuelos.backend.service;
 
-import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundExeption;
+import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.mapper.PassengerMapper;
 import com.gutierrez.reserva_vuelos.backend.model.dto.PassengerDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Passenger;
@@ -29,7 +29,7 @@ public class PassengerServiceImpl implements PassengerService{
 
     @Override
     public PassengerDto findPassengerById(Long id) {
-        return passengerRepository.findById(id).map(passengerMapper::passengerTopassengerDto).orElseThrow(() -> new ResourceNotFoundExeption("Passenger Not Found"));
+        return passengerRepository.findById(id).map(passengerMapper::passengerTopassengerDto).orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
     }
 
     @Override
@@ -40,7 +40,7 @@ public class PassengerServiceImpl implements PassengerService{
 
     @Override
     public PassengerDto updatePassenger(PassengerDto passengerDto, Long id) {
-        Passenger savedPassenger = passengerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundExeption("Passenger Not Found"));
+        Passenger savedPassenger = passengerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
         Passenger passenger = passengerMapper.passengerDtoToPassenger(passengerDto);
 
         if(Objects.nonNull(passenger.getFirstname()) && !"".equalsIgnoreCase(passenger.getFirstname())) {

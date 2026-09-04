@@ -1,6 +1,6 @@
 package com.gutierrez.reserva_vuelos.backend.service;
 
-import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundExeption;
+import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.mapper.AirportMapper;
 import com.gutierrez.reserva_vuelos.backend.model.dto.AirportDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airport;
@@ -31,7 +31,7 @@ public class AirportServiceImpl implements AirportService {
     public AirportDto findAirportById(Long id) {
         return airportRepository.findById(id).
                 map(airportMapper::airportToAriportDTO).
-                orElseThrow(() -> new ResourceNotFoundExeption("Airport Not Found"));
+                orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
     }
 
     @Override

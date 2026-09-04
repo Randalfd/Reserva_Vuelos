@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-09-03T22:40:05-0300",
+    date = "2026-09-04T18:35:46-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.12.1 (Eclipse Adoptium)"
 )
 @Component
@@ -23,19 +23,13 @@ public class BookingMapperImpl implements BookingMapper {
             return null;
         }
 
-        long passengerId = 0L;
-        long flightId = 0L;
+        Long passengerId = null;
+        Long flightId = null;
         BookingStatus status = null;
         SeatType seatType = null;
 
-        Long id = bookingPassengerId( booking );
-        if ( id != null ) {
-            passengerId = id;
-        }
-        Long id1 = bookingFlightId( booking );
-        if ( id1 != null ) {
-            flightId = id1;
-        }
+        passengerId = bookingPassengerId( booking );
+        flightId = bookingFlightId( booking );
         status = booking.getStatus();
         seatType = booking.getSeatType();
 
