@@ -2,6 +2,7 @@ package com.gutierrez.reserva_vuelos.backend.controller;
 
 import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.model.dto.BookingDto;
+import com.gutierrez.reserva_vuelos.backend.model.dto.BookingFlightDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Booking;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Passenger;
 import com.gutierrez.reserva_vuelos.backend.service.BookingService;
@@ -41,6 +42,12 @@ public class BookingController {
     @DeleteMapping("/api/booking/{id}")
     public void removeBooking(@PathVariable Long id) throws ResourceNotFoundException {
         bookingService.remove(id);
+    }
+
+    // Custom Endpoints
+    @GetMapping("/api/booking/findBookingWithFlight")
+    public List<BookingFlightDto> findBookingWithFlight() {
+        return bookingService.findBookingsWithFlight();
     }
 
 }

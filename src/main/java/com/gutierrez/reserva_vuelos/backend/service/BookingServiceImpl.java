@@ -3,6 +3,7 @@ package com.gutierrez.reserva_vuelos.backend.service;
 import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.mapper.BookingMapper;
 import com.gutierrez.reserva_vuelos.backend.model.dto.BookingDto;
+import com.gutierrez.reserva_vuelos.backend.model.dto.BookingFlightDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Booking;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Flight;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Passenger;
@@ -99,5 +100,10 @@ public class BookingServiceImpl implements BookingService {
                 orElseThrow(() -> new ResourceNotFoundException("Booking Not Found"));
 
         bookingRepository.deleteById(id);
+    }
+
+    @Override
+    public List<BookingFlightDto> findBookingsWithFlight() {
+        return bookingRepository.findBookingsWithFlight();
     }
 }
