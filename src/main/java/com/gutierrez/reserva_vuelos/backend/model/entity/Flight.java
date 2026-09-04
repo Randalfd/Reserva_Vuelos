@@ -21,13 +21,13 @@ public class Flight {
 
    @ManyToOne
    @JoinColumn(name = "origin_airport_id")
-   private Airport origin_airport;
+   private Airport originAirport;
 
    @ManyToOne
    @JoinColumn(name = "destination_airport_id")
-   private Airport destination_airport;
+   private Airport destinationAirport;
 
-   private double amount;
+   private double price;
    private LocalDate departure;
    private LocalDate arrival;
 

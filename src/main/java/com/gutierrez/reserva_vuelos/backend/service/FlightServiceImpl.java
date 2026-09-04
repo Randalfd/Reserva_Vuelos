@@ -2,7 +2,12 @@ package com.gutierrez.reserva_vuelos.backend.service;
 
 import com.gutierrez.reserva_vuelos.backend.exeption.FlightInvalidAmountExeption;
 import com.gutierrez.reserva_vuelos.backend.exeption.FlightInvalidDateExeption;
+import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundExeption;
+import com.gutierrez.reserva_vuelos.backend.mapper.FlightMapper;
+import com.gutierrez.reserva_vuelos.backend.model.dto.FlightDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Flight;
+import com.gutierrez.reserva_vuelos.backend.respository.AirlineRepository;
+import com.gutierrez.reserva_vuelos.backend.respository.AirportRepository;
 import com.gutierrez.reserva_vuelos.backend.respository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,63 +22,56 @@ public class FlightServiceImpl implements FlightService {
     @Autowired
     FlightRepository flightRepository;
 
+    @Autowired
+    FlightMapper flightMapper;
+
+    @Autowired
+    AirportRepository airportRepository;
+
+    @Autowired
+    AirlineRepository airlineRepository;
+
     @Override
-    public List<Flight> findAllFlights() {
-        return flightRepository.findAll();
+    public List<FlightDto> findAllFlights() {
+        return flightRepository.findAll().
+                stream().
+                map(flightMapper::flightToFlightDto).
+                toList();
     }
 
     @Override
-    public Flight findFlightById(Long id) {
-        return flightRepository.findById(id).get();
+    public FlightDto findFlightById(Long id) {
+        return flightRepository.findById(id).map(flightMapper::flightToFlightDto).orElseThrow(() -> new ResourceNotFoundExeption("Flight Not Found"));
     }
 
     @Override
-    public Flight saveFlight(Flight flight) {
-        LocalDate today = LocalDate.now();
+    public FlightDto saveFlight(FlightDto flightDto) {
+        Flight flight = flightMapper.flightDtoToFlight(flightDto);
+        flight.setAirline(airlineRepository.findById(flightDto.airlineId()).orElseThrow(() -> new ResourceNotFoundExeption("Airline Not Found")));
+        flight.setOriginAirport(airportRepository.findById(flightDto.originAirportId()).orElseThrow(() -> new ResourceNotFoundExeption("Origin Airport Not Found")));
+        flight.setDestinationAirport(airportRepository.findById(flightDto.destinationAirportId()).orElseThrow(() -> new ResourceNotFoundExeption("Destination Airport Not Found")));
 
-        if(flight.getArrival().isBefore(today)) {
-            throw new FlightInvalidDateExeption("La fecha de llegada no puede ser menor a la fecha actual");
-        }
-
-        if(flight.getDeparture().isBefore(today)) {
-            throw new FlightInvalidDateExeption("La fecha de partida no puede ser menor a la fecha actual");
-        }
-
-        if(flight.getAmount() < 0) {
-            throw new FlightInvalidAmountExeption("El monto no puede ser menor 0");
-        }
-
-        return flightRepository.save(flight);
+        return flightMapper.flightToFlightDto(flightRepository.save(flight));
     }
 
     @Override
-    public Flight updateFlight(Flight flight, Long id) {
-        Flight savedFlight = flightRepository.findById(id).get();
-
-        LocalDate today = LocalDate.now();
-
-        if(flight.getArrival().isBefore(today)) {
-            throw new FlightInvalidDateExeption("La fecha de llegada no puede ser menor a la fecha actual");
-        }
-
-        if(flight.getDeparture().isBefore(today)) {
-            throw new FlightInvalidDateExeption("La fecha de partida no puede ser menor a la fecha actual");
-        }
-
-        if(flight.getAmount() < 0) {
-            throw new FlightInvalidAmountExeption("El monto no puede ser menor 0");
-        }
+    public FlightDto updateFlight(FlightDto flightDto, Long id) {
+        Flight savedFlight = flightRepository.findById(id).orElseThrow(() -> new ResourceNotFoundExeption("Flight Not Found"));
+        Flight flight = flightMapper.flightDtoToFlight(flightDto);
+        flight.setAirline(airlineRepository.findById(flightDto.airlineId()).orElseThrow(() -> new ResourceNotFoundExeption("Airline Not Found")));
+        flight.setOriginAirport(airportRepository.findById(flightDto.originAirportId()).orElseThrow(() -> new ResourceNotFoundExeption("Origin Airport Not Found")));
+        flight.setDestinationAirport(airportRepository.findById(flightDto.destinationAirportId()).orElseThrow(() -> new ResourceNotFoundExeption("Destination Airport Not Found")));
 
         if(Objects.nonNull(flight.getAirline())) {
             savedFlight.setAirline(flight.getAirline());
         }
 
-        if(Objects.nonNull(flight.getOrigin_airport())) {
-            savedFlight.setOrigin_airport(flight.getOrigin_airport());
+        if(Objects.nonNull(flight.getOriginAirport())) {
+            savedFlight.setOriginAirport(flight.getOriginAirport());
         }
 
-        if(Objects.nonNull(flight.getDestination_airport())) {
-            savedFlight.setDestination_airport(flight.getDestination_airport());
+        if(Objects.nonNull(flight.getDestinationAirport())) {
+            savedFlight.setDestinationAirport(flight.getDestinationAirport());
         }
 
         if(Objects.nonNull(flight.getArrival())) {
@@ -84,7 +82,7 @@ public class FlightServiceImpl implements FlightService {
             savedFlight.setDeparture(flight.getDeparture());
         }
 
-        return flightRepository.save(savedFlight);
+        return flightMapper.flightToFlightDto(flightRepository.save(flight));
     }
 
     @Override
@@ -93,7 +91,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public List<Flight> findByOrderByDepartureDesc() {
+    public List<FlightDto> findByOrderByDepartureDesc() {
         return flightRepository.findByOrderByDepartureDesc();
     }
 }

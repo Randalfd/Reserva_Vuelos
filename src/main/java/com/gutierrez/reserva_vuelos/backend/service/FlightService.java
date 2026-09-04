@@ -1,16 +1,15 @@
 package com.gutierrez.reserva_vuelos.backend.service;
 
+import com.gutierrez.reserva_vuelos.backend.model.dto.FlightDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Flight;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface FlightService {
-    List<Flight> findAllFlights();
-    Flight findFlightById(Long id);
-    Flight saveFlight(Flight flight);
-    Flight updateFlight(Flight flight, Long id);
+    List<FlightDto> findAllFlights();
+    FlightDto findFlightById(Long id);
+    FlightDto saveFlight(FlightDto flightDto);
+    FlightDto updateFlight(FlightDto flightDto, Long id);
     void removeFlight(Long id);
-    List<Flight> findByOrderByDepartureDesc();
+    List<FlightDto> findByOrderByDepartureDesc();
 }
