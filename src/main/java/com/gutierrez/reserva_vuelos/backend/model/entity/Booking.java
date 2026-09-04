@@ -1,5 +1,7 @@
 package com.gutierrez.reserva_vuelos.backend.model.entity;
 
+import com.gutierrez.reserva_vuelos.backend.model.enums.BookingStatus;
+import com.gutierrez.reserva_vuelos.backend.model.enums.SeatType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,5 +25,8 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "flight_id")
     private Flight flight;
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private BookingStatus status;
+    @Enumerated(EnumType.STRING)
+    private SeatType seatType;
 }

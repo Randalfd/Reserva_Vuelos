@@ -1,38 +1,66 @@
 package com.gutierrez.reserva_vuelos.backend.service;
 
+import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundExeption;
+import com.gutierrez.reserva_vuelos.backend.mapper.BookingMapper;
+import com.gutierrez.reserva_vuelos.backend.model.dto.BookingDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Booking;
+import com.gutierrez.reserva_vuelos.backend.model.entity.Flight;
+import com.gutierrez.reserva_vuelos.backend.model.entity.Passenger;
 import com.gutierrez.reserva_vuelos.backend.respository.BookingRepository;
+import com.gutierrez.reserva_vuelos.backend.respository.FlightRepository;
+import com.gutierrez.reserva_vuelos.backend.respository.PassengerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class BookingServiceImpl implements BookingService {
-
     @Autowired
     BookingRepository bookingRepository;
 
+    @Autowired
+    BookingMapper bookingMapper;
+    @Autowired
+    FlightRepository flightRepository;
+
+    @Autowired
+    PassengerRepository passengerRepository;
+
+
     @Override
-    public List<Booking> findAllBookings() {
-        return bookingRepository.findAll();
+    public List<BookingDto> findAllBookings() {
+        return bookingRepository.findAll().
+                stream().
+                map(bookingMapper::bookingToBookingDto).
+                toList();
     }
 
     @Override
-    public Booking findBookingsById(Long id) {
-        return bookingRepository.findById(id).get();
+    public BookingDto findBookingsById(Long id) {
+        return bookingRepository.findById(id).
+                map(bookingMapper::bookingToBookingDto).
+                orElseThrow(() -> new ResourceNotFoundExeption("Booking Not Found"));
     }
 
     @Override
-    public Booking save(Booking booking) {
-        return bookingRepository.save(booking);
+    public BookingDto save(BookingDto bookingDto) {
+        Booking booking = bookingMapper.bookingDtoToBooking(bookingDto);
+
+        booking.setFlight(flightRepository.findById(bookingDto.flightId()).orElseThrow(() -> new ResourceNotFoundExeption("Flight Not Found")));
+        booking.setPassenger(passengerRepository.findById(bookingDto.passengerId()).orElseThrow(() -> new ResourceNotFoundExeption("Passenger Not Found")));
+
+        return bookingMapper.bookingToBookingDto(bookingRepository.save(booking));
     }
 
     @Override
-    public Booking update(Booking booking, Long id) {
+    public BookingDto update(BookingDto bookingDto, Long id) {
         Booking savedBooking = bookingRepository.findById(id).get();
+        Booking booking = bookingMapper.bookingDtoToBooking(bookingDto);
+
+        booking.setFlight(flightRepository.findById(bookingDto.flightId()).orElseThrow(() -> new ResourceNotFoundExeption("Flight Not Found")));
+        booking.setPassenger(passengerRepository.findById(bookingDto.passengerId()).orElseThrow(() -> new ResourceNotFoundExeption("Passenger Not Found")));
 
         if(Objects.nonNull(booking.getPassenger())) {
             savedBooking.setPassenger(booking.getPassenger());
@@ -42,10 +70,14 @@ public class BookingServiceImpl implements BookingService {
             savedBooking.setFlight(booking.getFlight());
         }
 
-        if(Objects.nonNull(booking.getStatus()) && !"".equalsIgnoreCase(booking.getStatus())) {
+        if(Objects.nonNull(booking.getStatus())) {
             savedBooking.setStatus(booking.getStatus());
         }
-        return bookingRepository.save(savedBooking);
+
+        if(Objects.nonNull(booking.getSeatType())) {
+            savedBooking.setSeatType(booking.getSeatType());
+        }
+        return bookingMapper.bookingToBookingDto(bookingRepository.save(savedBooking));
     }
 
     @Override

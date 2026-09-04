@@ -47,6 +47,7 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public FlightDto saveFlight(FlightDto flightDto) {
         Flight flight = flightMapper.flightDtoToFlight(flightDto);
+
         flight.setAirline(airlineRepository.findById(flightDto.airlineId()).orElseThrow(() -> new ResourceNotFoundExeption("Airline Not Found")));
         flight.setOriginAirport(airportRepository.findById(flightDto.originAirportId()).orElseThrow(() -> new ResourceNotFoundExeption("Origin Airport Not Found")));
         flight.setDestinationAirport(airportRepository.findById(flightDto.destinationAirportId()).orElseThrow(() -> new ResourceNotFoundExeption("Destination Airport Not Found")));
