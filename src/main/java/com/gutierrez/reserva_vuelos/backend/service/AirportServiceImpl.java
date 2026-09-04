@@ -28,7 +28,7 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
-    public AirportDto findAirportById(Long id) {
+    public AirportDto findAirportById(Long id) throws ResourceNotFoundException{
         return airportRepository.findById(id).
                 map(airportMapper::airportToAriportDTO).
                 orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
@@ -41,8 +41,10 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
-    public AirportDto updateAirport(AirportDto airportDto, Long id) {
-        Airport savedAirport = airportRepository.findById(id).get();
+    public AirportDto updateAirport(AirportDto airportDto, Long id) throws ResourceNotFoundException {
+        Airport savedAirport = airportRepository.findById(id).
+                orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
+
         Airport airport = airportMapper.airportDtoToAirport(airportDto);
 
         if(Objects.nonNull(airport.getName()) && !"".equalsIgnoreCase(airport.getName())) {
@@ -65,7 +67,9 @@ public class AirportServiceImpl implements AirportService {
     }
 
     @Override
-    public void remove(Long id) {
+    public void remove(Long id) throws ResourceNotFoundException {
+        Airport airport = airportRepository.findById(id).
+                orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
         airportRepository.deleteById(id);
     }
 }

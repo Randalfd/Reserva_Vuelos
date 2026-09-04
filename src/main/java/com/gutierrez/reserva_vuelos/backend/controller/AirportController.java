@@ -1,5 +1,6 @@
 package com.gutierrez.reserva_vuelos.backend.controller;
 
+import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.model.dto.AirportDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airport;
 import com.gutierrez.reserva_vuelos.backend.service.AirportService;
@@ -20,7 +21,7 @@ public class AirportController {
     }
 
     @GetMapping("/api/airport/{id}")
-    public AirportDto findAirportById(@PathVariable Long id) {
+    public AirportDto findAirportById(@PathVariable Long id) throws ResourceNotFoundException {
         return airportService.findAirportById(id);
     }
 
@@ -30,12 +31,12 @@ public class AirportController {
     }
 
     @PutMapping("/api/airport/{id}")
-    public AirportDto updateAirport(@RequestBody AirportDto airport, @PathVariable Long id) {
+    public AirportDto updateAirport(@RequestBody AirportDto airport, @PathVariable Long id) throws ResourceNotFoundException {
         return airportService.updateAirport(airport, id);
     }
 
     @DeleteMapping("/api/airport/{id}")
-    public void deleteAirport(@PathVariable Long id) {
+    public void deleteAirport(@PathVariable Long id) throws ResourceNotFoundException {
         airportService.remove(id);
     }
 }
