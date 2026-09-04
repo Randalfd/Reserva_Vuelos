@@ -29,7 +29,9 @@ public class PassengerServiceImpl implements PassengerService{
 
     @Override
     public PassengerDto findPassengerById(Long id) {
-        return passengerRepository.findById(id).map(passengerMapper::passengerTopassengerDto).orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
+        return passengerRepository.findById(id).
+                map(passengerMapper::passengerTopassengerDto).
+                orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
     }
 
     @Override
@@ -40,7 +42,9 @@ public class PassengerServiceImpl implements PassengerService{
 
     @Override
     public PassengerDto updatePassenger(PassengerDto passengerDto, Long id) {
-        Passenger savedPassenger = passengerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
+        Passenger savedPassenger = passengerRepository.findById(id).
+                orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
+
         Passenger passenger = passengerMapper.passengerDtoToPassenger(passengerDto);
 
         if(Objects.nonNull(passenger.getFirstname()) && !"".equalsIgnoreCase(passenger.getFirstname())) {
@@ -59,7 +63,10 @@ public class PassengerServiceImpl implements PassengerService{
     }
 
     @Override
-    public void removePassenger(Long id) {
+    public void removePassenger(Long id) throws ResourceNotFoundException {
+        passengerRepository.findById(id).
+                orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
+
         passengerRepository.deleteById(id);
     }
 }

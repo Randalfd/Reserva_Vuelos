@@ -83,7 +83,8 @@ public class AirlineServiceImpl implements AirlineService {
 
     @Override
     public void removeAirline(Long id) throws ResourceNotFoundException {
-        airlineRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
+        airlineRepository.findById(id).
+                orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
         airlineRepository.deleteById(id);
     }
 

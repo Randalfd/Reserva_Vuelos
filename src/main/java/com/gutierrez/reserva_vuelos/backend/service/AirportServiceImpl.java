@@ -68,7 +68,7 @@ public class AirportServiceImpl implements AirportService {
 
     @Override
     public void remove(Long id) throws ResourceNotFoundException {
-        Airport airport = airportRepository.findById(id).
+       airportRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
         airportRepository.deleteById(id);
     }
