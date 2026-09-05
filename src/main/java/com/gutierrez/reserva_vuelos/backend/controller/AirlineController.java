@@ -3,6 +3,7 @@ package com.gutierrez.reserva_vuelos.backend.controller;
 import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.model.dto.AirlineDto;
 import com.gutierrez.reserva_vuelos.backend.service.AirlineService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,12 +28,12 @@ public class AirlineController {
     }
 
     @PostMapping("/api/airline")
-    public AirlineDto saveAirline(@RequestBody AirlineDto airlineDto) throws ResourceNotFoundException {
+    public AirlineDto saveAirline(@Valid @RequestBody AirlineDto airlineDto) throws ResourceNotFoundException {
         return airlineService.saveAirline(airlineDto);
     }
 
     @PutMapping("/api/airline/{id}")
-    public AirlineDto updateAirline(@RequestBody AirlineDto airlineDto, @PathVariable Long id) throws ResourceNotFoundException{
+    public AirlineDto updateAirline(@Valid @RequestBody AirlineDto airlineDto, @PathVariable Long id) throws ResourceNotFoundException{
         return airlineService.updateAirline(airlineDto, id);
     }
 

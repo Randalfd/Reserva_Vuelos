@@ -6,6 +6,7 @@ import com.gutierrez.reserva_vuelos.backend.model.dto.BookingFlightDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Booking;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Passenger;
 import com.gutierrez.reserva_vuelos.backend.service.BookingService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,12 +31,12 @@ public class BookingController {
     }
 
     @PostMapping("/api/booking")
-    public BookingDto saveBooking(@RequestBody BookingDto bookingDto) throws ResourceNotFoundException {
+    public BookingDto saveBooking(@Valid @RequestBody BookingDto bookingDto) throws ResourceNotFoundException {
         return bookingService.save(bookingDto);
     }
 
     @PutMapping("/api/booking/{id}")
-    public BookingDto updateBooking(@RequestBody BookingDto bookingDto, @PathVariable Long id) throws ResourceNotFoundException {
+    public BookingDto updateBooking(@Valid @RequestBody BookingDto bookingDto, @PathVariable Long id) throws ResourceNotFoundException {
         return bookingService.update(bookingDto,id);
     }
 
