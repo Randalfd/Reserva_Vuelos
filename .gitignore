@@ -1,0 +1,24 @@
+syntax: glob
+
+# Maven
+target/
+
+# hg 
+.hg/
+.hgignore
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
