@@ -18,8 +18,7 @@ Desde la raíz del proyecto:
 mvn spring-boot:run
 ```
 
-!> [!IMPORTANT]
-
+> [!IMPORTANT]
 > Si el proyecto no inicia y hay problemas de dependencias ejecutar `mvn cleain package`
 > Para compilar el proyecto sin ejecutarlo:
 

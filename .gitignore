@@ -1,11 +1,9 @@
-syntax: glob
-
 # Maven
 target/
-
-# hg 
-.hg/
+# hg
 .hgignore
+.hg/
+
 # IDE
 .idea/
 *.iml
