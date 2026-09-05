@@ -19,7 +19,7 @@ mvn spring-boot:run
 ```
 
 > [!IMPORTANT]
-> Si el proyecto no inicia y hay problemas de dependencias ejecutar `mvn cleain package`
+> Si el proyecto no inicia y hay problemas de dependencias ejecutar `mvn clean package`
 
 Para compilar el proyecto sin ejecutarlo:
 
