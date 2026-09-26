@@ -1,17 +1,14 @@
 package com.gutierrez.reserva_vuelos.backend.controller;
 
 import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
-import com.gutierrez.reserva_vuelos.backend.model.dto.BookingDto;
+import com.gutierrez.reserva_vuelos.backend.model.dto.BookingRequestDto;
 import com.gutierrez.reserva_vuelos.backend.model.dto.BookingFlightDto;
-import com.gutierrez.reserva_vuelos.backend.model.entity.Booking;
-import com.gutierrez.reserva_vuelos.backend.model.entity.Passenger;
 import com.gutierrez.reserva_vuelos.backend.service.BookingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class BookingController {
@@ -21,23 +18,23 @@ public class BookingController {
 
     // CRUD Endopoints
     @GetMapping("/api/booking")
-    public List<BookingDto> findAllBookings(){
+    public List<BookingRequestDto> findAllBookings(){
         return bookingService.findAllBookings();
     }
 
     @GetMapping("/api/booking/{id}")
-    public BookingDto findBookingById(@PathVariable Long id) throws ResourceNotFoundException {
+    public BookingRequestDto findBookingById(@PathVariable Long id) throws ResourceNotFoundException {
         return bookingService.findBookingsById(id);
     }
 
     @PostMapping("/api/booking")
-    public BookingDto saveBooking(@Valid @RequestBody BookingDto bookingDto) throws ResourceNotFoundException {
-        return bookingService.save(bookingDto);
+    public BookingRequestDto saveBooking(@Valid @RequestBody BookingRequestDto bookingRequestDto) throws ResourceNotFoundException {
+        return bookingService.save(bookingRequestDto);
     }
 
     @PutMapping("/api/booking/{id}")
-    public BookingDto updateBooking(@Valid @RequestBody BookingDto bookingDto, @PathVariable Long id) throws ResourceNotFoundException {
-        return bookingService.update(bookingDto,id);
+    public BookingRequestDto updateBooking(@Valid @RequestBody BookingRequestDto bookingRequestDto, @PathVariable Long id) throws ResourceNotFoundException {
+        return bookingService.update(bookingRequestDto,id);
     }
 
     @DeleteMapping("/api/booking/{id}")

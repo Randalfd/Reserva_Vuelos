@@ -2,7 +2,7 @@ package com.gutierrez.reserva_vuelos.backend.service;
 
 import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.mapper.FlightMapper;
-import com.gutierrez.reserva_vuelos.backend.model.dto.FlightDto;
+import com.gutierrez.reserva_vuelos.backend.model.dto.FlightRequestDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airline;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airport;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Flight;
@@ -31,7 +31,7 @@ public class FlightServiceImpl implements FlightService {
     AirlineRepository airlineRepository;
 
     @Override
-    public List<FlightDto> findAllFlights() {
+    public List<FlightRequestDto> findAllFlights() {
         return flightRepository.findAll().
                 stream().
                 map(flightMapper::flightToFlightDto).
@@ -39,25 +39,25 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public FlightDto findFlightById(Long id) throws ResourceNotFoundException {
+    public FlightRequestDto findFlightById(Long id) throws ResourceNotFoundException {
         return flightRepository.findById(id).
                 map(flightMapper::flightToFlightDto).
                 orElseThrow(() -> new ResourceNotFoundException("Flight Not Found"));
     }
 
     @Override
-    public FlightDto saveFlight(FlightDto flightDto) throws ResourceNotFoundException {
-        Flight flight = flightMapper.flightDtoToFlight(flightDto);
+    public FlightRequestDto saveFlight(FlightRequestDto flightRequestDto) throws ResourceNotFoundException {
+        Flight flight = flightMapper.flightDtoToFlight(flightRequestDto);
 
-        Airline airline = airlineRepository.findById(flightDto.airlineId()).
+        Airline airline = airlineRepository.findById(flightRequestDto.airlineId()).
                 orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
         flight.setAirline(airline);
 
-        Airport originAirport = airportRepository.findById(flightDto.originAirportId()).
+        Airport originAirport = airportRepository.findById(flightRequestDto.originAirportId()).
                 orElseThrow(() -> new ResourceNotFoundException("Origin Airport Not Found"));
         flight.setOriginAirport(originAirport);
 
-        Airport destinationAirport = airportRepository.findById(flightDto.destinationAirportId()).
+        Airport destinationAirport = airportRepository.findById(flightRequestDto.destinationAirportId()).
                 orElseThrow(() -> new ResourceNotFoundException("Destination Airport Not Found"));
         flight.setDestinationAirport(destinationAirport);
 
@@ -65,21 +65,21 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public FlightDto updateFlight(FlightDto flightDto, Long id) throws ResourceNotFoundException {
+    public FlightRequestDto updateFlight(FlightRequestDto flightRequestDto, Long id) throws ResourceNotFoundException {
         Flight savedFlight = flightRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException("Flight Not Found"));
 
-        Flight flight = flightMapper.flightDtoToFlight(flightDto);
+        Flight flight = flightMapper.flightDtoToFlight(flightRequestDto);
 
-        Airline airline = airlineRepository.findById(flightDto.airlineId()).
+        Airline airline = airlineRepository.findById(flightRequestDto.airlineId()).
                 orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
         flight.setAirline(airline);
 
-        Airport originAirport = airportRepository.findById(flightDto.originAirportId()).
+        Airport originAirport = airportRepository.findById(flightRequestDto.originAirportId()).
                 orElseThrow(() -> new ResourceNotFoundException("Origin Airport Not Found"));
         flight.setOriginAirport(originAirport);
 
-        Airport destinationAirport = airportRepository.findById(flightDto.destinationAirportId()).
+        Airport destinationAirport = airportRepository.findById(flightRequestDto.destinationAirportId()).
                 orElseThrow(() -> new ResourceNotFoundException("Destination Airport Not Found"));
         flight.setDestinationAirport(destinationAirport);
 
@@ -114,7 +114,7 @@ public class FlightServiceImpl implements FlightService {
     }
 
     @Override
-    public List<FlightDto> findByOrderByDepartureDesc() {
+    public List<FlightRequestDto> findByOrderByDepartureDesc() {
         return flightRepository.findByOrderByDepartureDesc();
     }
 }

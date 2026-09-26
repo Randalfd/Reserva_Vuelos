@@ -2,7 +2,7 @@ package com.gutierrez.reserva_vuelos.backend.service;
 
 import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.mapper.BookingMapper;
-import com.gutierrez.reserva_vuelos.backend.model.dto.BookingDto;
+import com.gutierrez.reserva_vuelos.backend.model.dto.BookingRequestDto;
 import com.gutierrez.reserva_vuelos.backend.model.dto.BookingFlightDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Booking;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Flight;
@@ -31,7 +31,7 @@ public class BookingServiceImpl implements BookingService {
 
 
     @Override
-    public List<BookingDto> findAllBookings() {
+    public List<BookingRequestDto> findAllBookings() {
         return bookingRepository.findAll().
                 stream().
                 map(bookingMapper::bookingToBookingDto).
@@ -39,21 +39,21 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto findBookingsById(Long id) throws ResourceNotFoundException {
+    public BookingRequestDto findBookingsById(Long id) throws ResourceNotFoundException {
         return bookingRepository.findById(id).
                 map(bookingMapper::bookingToBookingDto).
                 orElseThrow(() -> new ResourceNotFoundException("Booking Not Found"));
     }
 
     @Override
-    public BookingDto save(BookingDto bookingDto) throws ResourceNotFoundException {
-        Booking booking = bookingMapper.bookingDtoToBooking(bookingDto);
+    public BookingRequestDto save(BookingRequestDto bookingRequestDto) throws ResourceNotFoundException {
+        Booking booking = bookingMapper.bookingDtoToBooking(bookingRequestDto);
 
-        Flight flight = flightRepository.findById(bookingDto.flightId()).
+        Flight flight = flightRepository.findById(bookingRequestDto.flightId()).
                 orElseThrow(() -> new ResourceNotFoundException("Flight Not Found"));
         booking.setFlight(flight);
 
-        Passenger passenger = passengerRepository.findById(bookingDto.passengerId()).
+        Passenger passenger = passengerRepository.findById(bookingRequestDto.passengerId()).
                 orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
         booking.setPassenger(passenger);
 
@@ -61,17 +61,17 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingDto update(BookingDto bookingDto, Long id) throws ResourceNotFoundException {
+    public BookingRequestDto update(BookingRequestDto bookingRequestDto, Long id) throws ResourceNotFoundException {
         Booking savedBooking = bookingRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException("Booking Not Found"));
 
-        Booking booking = bookingMapper.bookingDtoToBooking(bookingDto);
+        Booking booking = bookingMapper.bookingDtoToBooking(bookingRequestDto);
 
-        Flight flight = flightRepository.findById(bookingDto.flightId()).
+        Flight flight = flightRepository.findById(bookingRequestDto.flightId()).
                 orElseThrow(() -> new ResourceNotFoundException("Flight Not Found"));
         booking.setFlight(flight);
 
-        Passenger passenger = passengerRepository.findById(bookingDto.passengerId()).
+        Passenger passenger = passengerRepository.findById(bookingRequestDto.passengerId()).
                 orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
         booking.setPassenger(passenger);
 

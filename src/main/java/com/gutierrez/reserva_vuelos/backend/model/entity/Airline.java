@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "airlines")
 @Data
@@ -23,7 +25,14 @@ public class Airline {
     private String name;
     @ManyToOne
     @JoinColumn(name = "airport_id")
-    private Airport airport;
+    private Airport mainAirport;
+    @ManyToMany
+    @JoinTable(
+            name = "airline_airports",
+            joinColumns = @JoinColumn(name = "airline_id"),
+            inverseJoinColumns = @JoinColumn(name = "airport_id")
+    )
+    private Set<Airport> airports;
     @Email
     @NotBlank(message = "Airline email must be provided")
     private String email;

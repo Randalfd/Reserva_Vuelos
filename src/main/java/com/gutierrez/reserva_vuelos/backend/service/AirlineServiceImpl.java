@@ -2,7 +2,7 @@ package com.gutierrez.reserva_vuelos.backend.service;
 
 import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.mapper.AirlineMapper;
-import com.gutierrez.reserva_vuelos.backend.model.dto.AirlineDto;
+import com.gutierrez.reserva_vuelos.backend.model.dto.AirlineRequestDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airline;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airport;
 import com.gutierrez.reserva_vuelos.backend.respository.AirlineRepository;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class AirlineServiceImpl implements AirlineService {
@@ -27,43 +26,43 @@ public class AirlineServiceImpl implements AirlineService {
     AirlineMapper airlineMapper;
 
     @Override
-    public List<AirlineDto> findAllAirlines() {
+    public List<AirlineRequestDto> findAllAirlines() {
         return airlineRepository.findAll()
                 .stream()
-                .map(airlineMapper::airlineToAirlineDto)
+                .map(airlineMapper::airlineToAirlineRequestDto)
                 .toList();
     }
 
     @Override
-    public AirlineDto findAirlineById(Long id) throws ResourceNotFoundException {
+    public AirlineRequestDto findAirlineById(Long id) throws ResourceNotFoundException {
         return airlineRepository.findById(id).
-                map(airlineMapper::airlineToAirlineDto).
+                map(airlineMapper::airlineToAirlineRequestDto).
                 orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
     }
 
     @Override
-    public AirlineDto saveAirline(AirlineDto airlineDto) throws ResourceNotFoundException {
-        Airline airline = airlineMapper.airlineDtoToAirline(airlineDto);
-        Airport airport = airportRepository.findById(airlineDto.airportId()).
+    public AirlineRequestDto saveAirline(AirlineRequestDto airlineRequestDto) throws ResourceNotFoundException {
+        Airline airline = airlineMapper.airlineRequestDtoToAirline(airlineRequestDto);
+        Airport airport = airportRepository.findById(airlineRequestDto.airportId()).
                 orElseThrow(() -> new ResourceNotFoundException("Airport not Found"));
 
-        airline.setAirport(airport);
-        return airlineMapper.airlineToAirlineDto(airlineRepository.save(airline));
+        airline.setMainAirport(airport);
+        return airlineMapper.airlineToAirlineRequestDto(airlineRepository.save(airline));
     }
 
     @Override
-    public AirlineDto updateAirline(AirlineDto airlineDto, Long id) throws ResourceNotFoundException {
+    public AirlineRequestDto updateAirline(AirlineRequestDto airlineRequestDto, Long id) throws ResourceNotFoundException {
         Airline savedAirline = airlineRepository.findById(id).
                 orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
 
-        Airline airline = airlineMapper.airlineDtoToAirline(airlineDto);
+        Airline airline = airlineMapper.airlineRequestDtoToAirline(airlineRequestDto);
 
-        Airport airport = airportRepository.findById(airlineDto.airportId()).
+        Airport airport = airportRepository.findById(airlineRequestDto.airportId()).
                 orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
-        airline.setAirport(airport);
+        airline.setMainAirport(airport);
 
-        if (Objects.nonNull(airline.getAirport())) {
-            savedAirline.setAirport(airline.getAirport());
+        if (Objects.nonNull(airline.getMainAirport())) {
+            savedAirline.setMainAirport(airline.getMainAirport());
         }
 
         if (Objects.nonNull(airline.getName()) && !"".equalsIgnoreCase(airline.getName())) {
@@ -78,7 +77,7 @@ public class AirlineServiceImpl implements AirlineService {
             savedAirline.setPhone(airline.getPhone());
         }
 
-        return airlineMapper.airlineToAirlineDto(airlineRepository.save(savedAirline));
+        return airlineMapper.airlineToAirlineRequestDto(airlineRepository.save(savedAirline));
     }
 
     @Override
@@ -89,9 +88,9 @@ public class AirlineServiceImpl implements AirlineService {
     }
 
     @Override
-    public AirlineDto findByName(String name) throws ResourceNotFoundException {
+    public AirlineRequestDto findByName(String name) throws ResourceNotFoundException {
         Airline airline = airlineRepository.findByName(name).
                 orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
-        return airlineMapper.airlineToAirlineDto(airline);
+        return airlineMapper.airlineToAirlineRequestDto(airline);
     }
 }
