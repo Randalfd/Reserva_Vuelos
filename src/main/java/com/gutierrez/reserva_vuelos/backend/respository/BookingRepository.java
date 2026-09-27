@@ -17,4 +17,12 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "JOIN f.originAirport JOIN f.destinationAirport JOIN f.airline")
     List<BookingFlightDto> findBookingsWithFlight();
 
+    @Query("SELECT count(b) FROM Booking b GROUP BY b.passenger ORDER BY count(b) DESC")
+    List<Long> countPassengerBooking();
+
+    @Query("""
+        SELECT b FROM Booking b 
+        WHERE b.status = com.gutierrez.reserva_vuelos.backend.model.enums.BookingStatus.CANCELLED
+        """)
+    List<Booking> findCancelledBookings();
 }

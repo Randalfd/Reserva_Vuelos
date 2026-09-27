@@ -14,39 +14,49 @@ import java.util.List;
 @RestController
 public class BookingController {
 
-    @Autowired
-    BookingService bookingService;
+  @Autowired
+  BookingService bookingService;
 
-    // CRUD Endopoints
-    @GetMapping("/api/booking")
-    public List<BookingResponseDto> findAllBookings(){
-        return bookingService.findAllBookings();
-    }
+  // CRUD Endopoints
+  @GetMapping("/api/booking")
+  public List<BookingResponseDto> findAllBookings() {
+    return bookingService.findAllBookings();
+  }
 
-    @GetMapping("/api/booking/{id}")
-    public BookingResponseDto findBookingById(@PathVariable Long id) throws ResourceNotFoundException {
-        return bookingService.findBookingsById(id);
-    }
+  @GetMapping("/api/booking/{id}")
+  public BookingResponseDto findBookingById(@PathVariable Long id) throws ResourceNotFoundException {
+    return bookingService.findBookingsById(id);
+  }
 
-    @PostMapping("/api/booking")
-    public BookingResponseDto saveBooking(@Valid @RequestBody BookingRequestDto bookingRequestDto) throws ResourceNotFoundException {
-        return bookingService.save(bookingRequestDto);
-    }
+  @PostMapping("/api/booking")
+  public BookingResponseDto saveBooking(@Valid @RequestBody BookingRequestDto bookingRequestDto) throws ResourceNotFoundException {
+    return bookingService.save(bookingRequestDto);
+  }
 
-    @PutMapping("/api/booking/{id}")
-    public BookingResponseDto updateBooking(@Valid @RequestBody BookingRequestDto bookingRequestDto, @PathVariable Long id) throws ResourceNotFoundException {
-        return bookingService.update(bookingRequestDto,id);
-    }
+  @PutMapping("/api/booking/{id}")
+  public BookingResponseDto updateBooking(@Valid @RequestBody BookingRequestDto bookingRequestDto, @PathVariable Long id) throws ResourceNotFoundException {
+    return bookingService.update(bookingRequestDto, id);
+  }
 
-    @DeleteMapping("/api/booking/{id}")
-    public void removeBooking(@PathVariable Long id) throws ResourceNotFoundException {
-        bookingService.remove(id);
-    }
+  @DeleteMapping("/api/booking/{id}")
+  public void removeBooking(@PathVariable Long id) throws ResourceNotFoundException {
+    bookingService.remove(id);
+  }
 
-    // Custom Endpoints
-    @GetMapping("/api/booking/findBookingWithFlight")
-    public List<BookingFlightDto> findBookingWithFlight() {
-        return bookingService.findBookingsWithFlight();
-    }
+  // Custom Endpoints
+  @GetMapping("/api/booking/findBookingWithFlight")
+  public List<BookingFlightDto> findBookingWithFlight() {
+    return bookingService.findBookingsWithFlight();
+  }
 
+  @GetMapping("/api/booking/countPassengerBookings")
+  public List<Long> countPassengerBookings() {
+    return bookingService.countPassengerBookings();
+  }
+
+  @GetMapping("/api/booking/findCancelledBookings")
+  public List<BookingResponseDto> findCancelledBookings() {
+    return bookingService.findCancelledBookings();
+  }
 }
+

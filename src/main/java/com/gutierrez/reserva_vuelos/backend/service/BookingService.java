@@ -15,4 +15,6 @@ public interface BookingService {
    void remove(Long id) throws ResourceNotFoundException;
 
    List<BookingFlightDto> findBookingsWithFlight();
+   List<Long> countPassengerBookings();
+   List<BookingResponseDto> findCancelledBookings();
 }
