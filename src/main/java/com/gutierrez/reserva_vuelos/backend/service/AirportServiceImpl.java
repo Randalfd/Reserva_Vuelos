@@ -13,63 +13,55 @@ import java.util.Objects;
 
 @Service
 public class AirportServiceImpl implements AirportService {
-    @Autowired
-    AirportRepository airportRepository;
+  @Autowired
+  AirportRepository airportRepository;
 
-    @Autowired
-    AirportMapper airportMapper;
+  @Autowired
+  AirportMapper airportMapper;
 
-    @Override
-    public List<AirportDto> findAllAirports() {
-        return airportRepository.findAll().
-                stream().
-                map(airportMapper::airportToAriportDTO).
-                toList();
-    }
+  @Override
+  public List<AirportDto> findAllAirports() {
+    return airportRepository.findAll().
+            stream().
+            map(airportMapper::airportToAriportDTO).
+            toList();
+  }
 
-    @Override
-    public AirportDto findAirportById(Long id) throws ResourceNotFoundException{
-        return airportRepository.findById(id).
-                map(airportMapper::airportToAriportDTO).
-                orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
-    }
+  @Override
+  public AirportDto findAirportById(Long id) throws ResourceNotFoundException {
+    return airportRepository.findById(id).
+            map(airportMapper::airportToAriportDTO).
+            orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
+  }
 
-    @Override
-    public AirportDto saveAirport(AirportDto airportDto) {
-        Airport airport = airportMapper.airportDtoToAirport(airportDto) ;
-        return airportMapper.airportToAriportDTO(airportRepository.save(airport));
-    }
+  @Override
+  public AirportDto saveAirport(AirportDto airportDto) {
+    Airport airport = airportMapper.airportDtoToAirport(airportDto);
+    return airportMapper.airportToAriportDTO(airportRepository.save(airport));
+  }
 
-    @Override
-    public AirportDto updateAirport(AirportDto airportDto, Long id) throws ResourceNotFoundException {
-        Airport savedAirport = airportRepository.findById(id).
-                orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
+  @Override
+  public AirportDto updateAirport(AirportDto airportDto, Long id) throws ResourceNotFoundException {
+    Airport savedAirport = airportRepository.findById(id).
+            orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
 
-        Airport airport = airportMapper.airportDtoToAirport(airportDto);
+    Airport airport = airportMapper.airportDtoToAirport(airportDto);
 
-        if(Objects.nonNull(airport.getName()) && !"".equalsIgnoreCase(airport.getName())) {
-            savedAirport.setName(airport.getName());
-        }
+    savedAirport.setName(airport.getName());
 
-        if(Objects.nonNull(airport.getAddress()) && !"".equalsIgnoreCase(airport.getAddress())) {
-            savedAirport.setAddress(airport.getAddress());
-        }
+    savedAirport.setAddress(airport.getAddress());
 
-        if(Objects.nonNull(airport.getCity()) && !"".equalsIgnoreCase(airport.getCity())) {
-            savedAirport.setCity(airport.getCity());
-        }
+    savedAirport.setCity(airport.getCity());
 
-        if(Objects.nonNull(airport.getIcao()) && !"".equalsIgnoreCase(airport.getIcao())) {
-            savedAirport.setIcao(airport.getIcao());
-        }
+    savedAirport.setIcao(airport.getIcao());
 
-        return airportMapper.airportToAriportDTO(airportRepository.save(savedAirport));
-    }
+    return airportMapper.airportToAriportDTO(airportRepository.save(savedAirport));
+  }
 
-    @Override
-    public void remove(Long id) throws ResourceNotFoundException {
-       airportRepository.findById(id).
-                orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
-        airportRepository.deleteById(id);
-    }
+  @Override
+  public void remove(Long id) throws ResourceNotFoundException {
+    airportRepository.findById(id).
+            orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
+    airportRepository.deleteById(id);
+  }
 }

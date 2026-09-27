@@ -7,18 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Set;
 
 public record AirlineResponseDto(
-        @NotNull(message = "Airline name must be provided")
         String name,
-
-        @NotNull(message = "Airline airport must be provided")
         Airport mainAirport,
-
         Set<Airport> airports,
-
-        @Email
-        @NotNull(message = "Airline email must be provided")
         String email,
-
-        @NotNull(message = "Airline contact phone must be provided")
         String contactPhone) {
 }

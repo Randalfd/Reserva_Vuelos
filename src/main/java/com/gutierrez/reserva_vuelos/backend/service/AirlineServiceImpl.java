@@ -3,6 +3,7 @@ package com.gutierrez.reserva_vuelos.backend.service;
 import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.mapper.AirlineMapper;
 import com.gutierrez.reserva_vuelos.backend.model.dto.AirlineRequestDto;
+import com.gutierrez.reserva_vuelos.backend.model.dto.AirlineResponseDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airline;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Airport;
 import com.gutierrez.reserva_vuelos.backend.respository.AirlineRepository;
@@ -10,87 +11,84 @@ import com.gutierrez.reserva_vuelos.backend.respository.AirportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class AirlineServiceImpl implements AirlineService {
 
-    @Autowired
-    AirlineRepository airlineRepository;
+  @Autowired
+  AirlineRepository airlineRepository;
 
-    @Autowired
-    AirportRepository airportRepository;
+  @Autowired
+  AirportRepository airportRepository;
 
-    @Autowired
-    AirlineMapper airlineMapper;
+  @Autowired
+  AirlineMapper airlineMapper;
 
-    @Override
-    public List<AirlineRequestDto> findAllAirlines() {
-        return airlineRepository.findAll()
-                .stream()
-                .map(airlineMapper::airlineToAirlineRequestDto)
-                .toList();
-    }
+  @Override
+  public List<AirlineResponseDto> findAllAirlines() {
+    return airlineRepository.findAll()
+            .stream()
+            .map(airlineMapper::airlineToAirlineResponseDto)
+            .toList();
+  }
 
-    @Override
-    public AirlineRequestDto findAirlineById(Long id) throws ResourceNotFoundException {
-        return airlineRepository.findById(id).
-                map(airlineMapper::airlineToAirlineRequestDto).
-                orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
-    }
+  @Override
+  public AirlineResponseDto findAirlineById(Long id) throws ResourceNotFoundException {
+    return airlineRepository.findById(id).
+            map(airlineMapper::airlineToAirlineResponseDto).
+            orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
+  }
 
-    @Override
-    public AirlineRequestDto saveAirline(AirlineRequestDto airlineRequestDto) throws ResourceNotFoundException {
-        Airline airline = airlineMapper.airlineRequestDtoToAirline(airlineRequestDto);
-        Airport airport = airportRepository.findById(airlineRequestDto.airportId()).
-                orElseThrow(() -> new ResourceNotFoundException("Airport not Found"));
+  @Override
+  public AirlineResponseDto saveAirline(AirlineRequestDto airlineRequestDto) throws ResourceNotFoundException {
+    Airline airline = airlineMapper.airlineRequestDtoToAirline(airlineRequestDto);
+    Airport airport = airportRepository.findById(airlineRequestDto.mainAirportId()).
+            orElseThrow(() -> new ResourceNotFoundException("Airport not Found"));
 
-        airline.setMainAirport(airport);
-        return airlineMapper.airlineToAirlineRequestDto(airlineRepository.save(airline));
-    }
+    airline.setMainAirport(airport);
 
-    @Override
-    public AirlineRequestDto updateAirline(AirlineRequestDto airlineRequestDto, Long id) throws ResourceNotFoundException {
-        Airline savedAirline = airlineRepository.findById(id).
-                orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
+    Set<Airport> airports = new HashSet<>(airportRepository.findAllById(airlineRequestDto.airportsIds()));
+    if(airports.size() != airlineRequestDto.airportsIds().size()) throw new ResourceNotFoundException("One or more airports not found");
+    airline.setAirports(airports);
 
-        Airline airline = airlineMapper.airlineRequestDtoToAirline(airlineRequestDto);
+    return airlineMapper.airlineToAirlineResponseDto(airlineRepository.save(airline));
+  }
 
-        Airport airport = airportRepository.findById(airlineRequestDto.airportId()).
-                orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
-        airline.setMainAirport(airport);
+  @Override
+  public AirlineResponseDto updateAirline(AirlineRequestDto airlineRequestDto, Long id) throws ResourceNotFoundException {
+    Airline savedAirline = airlineRepository.findById(id).
+            orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
 
-        if (Objects.nonNull(airline.getMainAirport())) {
-            savedAirline.setMainAirport(airline.getMainAirport());
-        }
+    Airline airline = airlineMapper.airlineRequestDtoToAirline(airlineRequestDto);
 
-        if (Objects.nonNull(airline.getName()) && !"".equalsIgnoreCase(airline.getName())) {
-            savedAirline.setName(airline.getName());
-        }
+    Airport airport = airportRepository.findById(airlineRequestDto.mainAirportId()).
+            orElseThrow(() -> new ResourceNotFoundException("Airport Not Found"));
+    airline.setMainAirport(airport);
 
-        if (Objects.nonNull(airline.getEmail()) && !"".equalsIgnoreCase(airline.getEmail())) {
-            savedAirline.setEmail(airline.getEmail());
-        }
+    // validaciones desde el lado del requestDto
+    savedAirline.setMainAirport(airline.getMainAirport());
+    savedAirline.setName(airline.getName());
+    savedAirline.setEmail(airline.getEmail());
+    savedAirline.setPhone(airline.getPhone());
 
-        if (Objects.nonNull(airline.getPhone()) && !"".equalsIgnoreCase(airline.getPhone())) {
-            savedAirline.setPhone(airline.getPhone());
-        }
+    return airlineMapper.airlineToAirlineResponseDto(airlineRepository.save(savedAirline));
+  }
 
-        return airlineMapper.airlineToAirlineRequestDto(airlineRepository.save(savedAirline));
-    }
+  @Override
+  public void removeAirline(Long id) throws ResourceNotFoundException {
+    airlineRepository.findById(id).
+            orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
+    airlineRepository.deleteById(id);
+  }
 
-    @Override
-    public void removeAirline(Long id) throws ResourceNotFoundException {
-        airlineRepository.findById(id).
-                orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
-        airlineRepository.deleteById(id);
-    }
-
-    @Override
-    public AirlineRequestDto findByName(String name) throws ResourceNotFoundException {
-        Airline airline = airlineRepository.findByName(name).
-                orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
-        return airlineMapper.airlineToAirlineRequestDto(airline);
-    }
+  @Override
+  public AirlineResponseDto findByName(String name) throws ResourceNotFoundException {
+    Airline airline = airlineRepository.findByName(name).
+            orElseThrow(() -> new ResourceNotFoundException("Airline Not Found"));
+    return airlineMapper.airlineToAirlineResponseDto(airline);
+  }
 }

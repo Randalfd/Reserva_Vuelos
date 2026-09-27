@@ -2,6 +2,7 @@ package com.gutierrez.reserva_vuelos.backend.controller;
 
 import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.model.dto.BookingRequestDto;
+import com.gutierrez.reserva_vuelos.backend.model.dto.BookingResponseDto;
 import com.gutierrez.reserva_vuelos.backend.model.dto.BookingFlightDto;
 import com.gutierrez.reserva_vuelos.backend.service.BookingService;
 import jakarta.validation.Valid;
@@ -18,22 +19,22 @@ public class BookingController {
 
     // CRUD Endopoints
     @GetMapping("/api/booking")
-    public List<BookingRequestDto> findAllBookings(){
+    public List<BookingResponseDto> findAllBookings(){
         return bookingService.findAllBookings();
     }
 
     @GetMapping("/api/booking/{id}")
-    public BookingRequestDto findBookingById(@PathVariable Long id) throws ResourceNotFoundException {
+    public BookingResponseDto findBookingById(@PathVariable Long id) throws ResourceNotFoundException {
         return bookingService.findBookingsById(id);
     }
 
     @PostMapping("/api/booking")
-    public BookingRequestDto saveBooking(@Valid @RequestBody BookingRequestDto bookingRequestDto) throws ResourceNotFoundException {
+    public BookingResponseDto saveBooking(@Valid @RequestBody BookingRequestDto bookingRequestDto) throws ResourceNotFoundException {
         return bookingService.save(bookingRequestDto);
     }
 
     @PutMapping("/api/booking/{id}")
-    public BookingRequestDto updateBooking(@Valid @RequestBody BookingRequestDto bookingRequestDto, @PathVariable Long id) throws ResourceNotFoundException {
+    public BookingResponseDto updateBooking(@Valid @RequestBody BookingRequestDto bookingRequestDto, @PathVariable Long id) throws ResourceNotFoundException {
         return bookingService.update(bookingRequestDto,id);
     }
 

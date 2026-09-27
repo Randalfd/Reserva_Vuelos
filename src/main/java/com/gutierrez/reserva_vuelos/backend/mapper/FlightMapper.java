@@ -8,12 +8,10 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = { AirlineMapper.class, AirportMapper.class })
 public interface FlightMapper {
-    @Mapping(source = "originAirport.id", target = "originAirportId")
-    @Mapping(source = "destinationAirport.id", target = "destinationAirportId")
-    @Mapping(source = "airline.id", target = "airlineId")
-    FlightRequestDto flightToFlightDto(Flight flight);
-
     Flight flightDtoToFlight(FlightRequestDto flightRequestDto);
 
+    @Mapping(source = "originAirport", target = "originAirportId")
+    @Mapping(source = "destinationAirport", target = "destinationAirportId")
+    @Mapping(source = "airline", target = "airlineId")
     FlightResponseDto flightToFlightResponseDto(Flight flight);
 }

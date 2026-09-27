@@ -12,61 +12,56 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class PassengerServiceImpl implements PassengerService{
+public class PassengerServiceImpl implements PassengerService {
 
-    @Autowired
-    PassengerRepository passengerRepository;
+  @Autowired
+  PassengerRepository passengerRepository;
 
-    @Autowired
-    PassengerMapper passengerMapper;
-    @Override
-    public List<PassengerDto> findAllPassenger() {
-        return passengerRepository.findAll().
-                stream().
-                map(passengerMapper::passengerTopassengerDto).
-                toList();
-    }
+  @Autowired
+  PassengerMapper passengerMapper;
 
-    @Override
-    public PassengerDto findPassengerById(Long id) {
-        return passengerRepository.findById(id).
-                map(passengerMapper::passengerTopassengerDto).
-                orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
-    }
+  @Override
+  public List<PassengerDto> findAllPassenger() {
+    return passengerRepository.findAll().
+            stream().
+            map(passengerMapper::passengerTopassengerDto).
+            toList();
+  }
 
-    @Override
-    public PassengerDto savePassenger(PassengerDto passengerDto) {
-        Passenger passenger = passengerMapper.passengerDtoToPassenger(passengerDto);
-        return passengerMapper.passengerTopassengerDto(passengerRepository.save(passenger));
-    }
+  @Override
+  public PassengerDto findPassengerById(Long id) {
+    return passengerRepository.findById(id).
+            map(passengerMapper::passengerTopassengerDto).
+            orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
+  }
 
-    @Override
-    public PassengerDto updatePassenger(PassengerDto passengerDto, Long id) {
-        Passenger savedPassenger = passengerRepository.findById(id).
-                orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
+  @Override
+  public PassengerDto savePassenger(PassengerDto passengerDto) {
+    Passenger passenger = passengerMapper.passengerDtoToPassenger(passengerDto);
+    return passengerMapper.passengerTopassengerDto(passengerRepository.save(passenger));
+  }
 
-        Passenger passenger = passengerMapper.passengerDtoToPassenger(passengerDto);
+  @Override
+  public PassengerDto updatePassenger(PassengerDto passengerDto, Long id) {
+    Passenger savedPassenger = passengerRepository.findById(id).
+            orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
 
-        if(Objects.nonNull(passenger.getFirstname()) && !"".equalsIgnoreCase(passenger.getFirstname())) {
-            savedPassenger.setFirstname(passenger.getFirstname());
-        }
+    Passenger passenger = passengerMapper.passengerDtoToPassenger(passengerDto);
 
-        if(Objects.nonNull(passenger.getLastname()) && !"".equalsIgnoreCase(passenger.getLastname())) {
-            savedPassenger.setLastname(passenger.getLastname());
-        }
+    savedPassenger.setFirstname(passenger.getFirstname());
 
-        if(Objects.nonNull(passenger.getEmail()) && !"".equalsIgnoreCase(passenger.getEmail())) {
-            savedPassenger.setEmail(passenger.getEmail());
-        }
+    savedPassenger.setLastname(passenger.getLastname());
 
-        return passengerMapper.passengerTopassengerDto(passengerRepository.save(savedPassenger));
-    }
+    savedPassenger.setEmail(passenger.getEmail());
 
-    @Override
-    public void removePassenger(Long id) throws ResourceNotFoundException {
-        passengerRepository.findById(id).
-                orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
+    return passengerMapper.passengerTopassengerDto(passengerRepository.save(savedPassenger));
+  }
 
-        passengerRepository.deleteById(id);
-    }
+  @Override
+  public void removePassenger(Long id) throws ResourceNotFoundException {
+    passengerRepository.findById(id).
+            orElseThrow(() -> new ResourceNotFoundException("Passenger Not Found"));
+
+    passengerRepository.deleteById(id);
+  }
 }
