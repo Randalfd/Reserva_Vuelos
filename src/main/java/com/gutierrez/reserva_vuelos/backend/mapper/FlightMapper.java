@@ -10,8 +10,5 @@ import org.mapstruct.Mapping;
 public interface FlightMapper {
     Flight flightDtoToFlight(FlightRequestDto flightRequestDto);
 
-    @Mapping(source = "originAirport", target = "originAirportId")
-    @Mapping(source = "destinationAirport", target = "destinationAirportId")
-    @Mapping(source = "airline", target = "airlineId")
     FlightResponseDto flightToFlightResponseDto(Flight flight);
 }
