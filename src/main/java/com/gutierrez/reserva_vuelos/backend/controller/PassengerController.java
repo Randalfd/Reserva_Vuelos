@@ -40,4 +40,9 @@ public class PassengerController {
     public void removePassenger(@PathVariable Long id) throws ResourceNotFoundException {
         passengerService.removePassenger(id);
     }
+
+    @GetMapping("/api/passenger/findByNameLike/{name}")
+    public List<PassengerDto> findByFirstNameLike(@PathVariable String name) {
+        return passengerService.findByFirstnameLike(name);
+    }
 }

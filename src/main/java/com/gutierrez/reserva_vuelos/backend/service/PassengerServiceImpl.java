@@ -64,4 +64,12 @@ public class PassengerServiceImpl implements PassengerService {
 
     passengerRepository.deleteById(id);
   }
+
+  @Override
+  public List<PassengerDto> findByFirstnameLike(String pattern) {
+    return passengerRepository.findByFirstnameLike(pattern).
+            stream().
+            map(passengerMapper::passengerTopassengerDto).
+            toList();
+  }
 }

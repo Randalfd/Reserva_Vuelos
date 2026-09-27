@@ -2,6 +2,7 @@ package com.gutierrez.reserva_vuelos.backend.service;
 
 import com.gutierrez.reserva_vuelos.backend.exeption.ResourceNotFoundException;
 import com.gutierrez.reserva_vuelos.backend.model.dto.PassengerDto;
+import com.gutierrez.reserva_vuelos.backend.model.entity.Passenger;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface PassengerService {
     PassengerDto savePassenger(PassengerDto passengerDto);
     PassengerDto updatePassenger(PassengerDto passengerDto, Long id) throws ResourceNotFoundException;
     void removePassenger(Long id) throws ResourceNotFoundException;
+    List<PassengerDto> findByFirstnameLike(String pattern);
 }

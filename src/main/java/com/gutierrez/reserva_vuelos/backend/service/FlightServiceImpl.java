@@ -11,8 +11,12 @@ import com.gutierrez.reserva_vuelos.backend.respository.AirlineRepository;
 import com.gutierrez.reserva_vuelos.backend.respository.AirportRepository;
 import com.gutierrez.reserva_vuelos.backend.respository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -110,5 +114,19 @@ public class FlightServiceImpl implements FlightService {
             stream().
             map(flightMapper::flightToFlightResponseDto).
             toList();
+  }
+
+  @Override
+  public Page<FlightResponseDto> findByDepartureBetween(LocalDate start, LocalDate end, int pageIndex, int pageSize) {
+    Pageable pageable = PageRequest.of(pageIndex, pageSize);
+    Page<Flight> flightPage = flightRepository.findByDepartureBetween(start,end, pageable);
+    return flightPage.map(flightMapper::flightToFlightResponseDto);
+  }
+
+  @Override
+  public Page<FlightResponseDto> findByArrivalAfter(LocalDate arrival, int pageIndex, int pageSize) {
+    Pageable pageable = PageRequest.of(pageIndex, pageSize);
+    Page<Flight> flightPage = flightRepository.findByArrivalAfter(arrival, pageable);
+    return flightPage.map(flightMapper::flightToFlightResponseDto);
   }
 }

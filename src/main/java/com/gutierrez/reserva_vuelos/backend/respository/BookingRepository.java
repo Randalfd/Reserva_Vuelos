@@ -2,9 +2,11 @@ package com.gutierrez.reserva_vuelos.backend.respository;
 
 import com.gutierrez.reserva_vuelos.backend.model.dto.BookingFlightDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.Booking;
+import org.hibernate.query.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
@@ -14,4 +16,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "FROM Booking b JOIN b.flight f " +
             "JOIN f.originAirport JOIN f.destinationAirport JOIN f.airline")
     List<BookingFlightDto> findBookingsWithFlight();
+
 }
