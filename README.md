@@ -55,10 +55,6 @@ docker compose down
 Ejecutas la API con Maven, pero la base de datos sigue siendo PostgreSQL: tienes que
 tenerla instalada y corriendo por tu cuenta.
 
-### Opción 3: Intellij
-Cargar la raiz del proyecto y compilar desde la propia herramienta.
-Requiere tener DB cargada para ejecutar con datos mencionados;
-
 #### Requisitos previos
 
 - **JDK 21** o superior (definido en `pom.xml`).
@@ -75,6 +71,10 @@ mvn spring-boot:run
 
 > [!NOTE]
 > Si el proyecto no inicia y hay problemas de dependencias ejecutar `mvn clean package`.
+
+### Opción 3: Intellij
+Cargar la raiz del proyecto y compilar desde la propia herramienta.
+Requiere tener DB cargada para ejecutar con datos mencionados;
 
 Para compilar el proyecto sin ejecutarlo:
 
