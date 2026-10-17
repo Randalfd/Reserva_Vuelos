@@ -14,4 +14,5 @@ public record PassengerDto(
         @Email
         @NotNull(message = "Passenger email must be provided")
         @NotBlank(message = "Passenger email must not be blank")
-        String email) {}
+        String email
+) {}

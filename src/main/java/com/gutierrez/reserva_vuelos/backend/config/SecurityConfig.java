@@ -1,5 +1,7 @@
 package com.gutierrez.reserva_vuelos.backend.config;
 
+import com.gutierrez.reserva_vuelos.backend.error.CustomAccessDeniedExeptionHandler;
+import com.gutierrez.reserva_vuelos.backend.error.CustomAuthenticationEntryPoint;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -23,17 +26,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final UserDetailsService userDetailsService;
+  private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+  private final CustomAccessDeniedExeptionHandler accessDeniedExeptionHandler;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .exceptionHandling(exception -> exception
+                    .authenticationEntryPoint(authenticationEntryPoint)
+                    .accessDeniedHandler(accessDeniedExeptionHandler)
+            )
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/register").permitAll()
                     .requestMatchers("/api/auth/login").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/api/flight/**").permitAll()
                     // ADMIN Endpoints
-                    .requestMatchers(HttpMethod.DELETE, "/api/**").hasRole("ADMIN")
                     .requestMatchers("/actuator").hasRole("ADMIN")
                     .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

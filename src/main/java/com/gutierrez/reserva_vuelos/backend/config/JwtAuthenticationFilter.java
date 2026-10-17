@@ -57,6 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       SecurityContextHolder.getContext().setAuthentication(token);
 
     } catch (JwtException | IllegalArgumentException | ResourceNotFoundException e) {
+      SecurityContextHolder.clearContext();
       // jwt no valido
       // continua de largo a doFilter y es manejado por  Spring.
       // TODO:
