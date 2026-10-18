@@ -2,9 +2,11 @@ package com.gutierrez.reserva_vuelos.backend.config;
 
 import com.gutierrez.reserva_vuelos.backend.model.entity.*;
 import com.gutierrez.reserva_vuelos.backend.model.enums.BookingStatus;
+import com.gutierrez.reserva_vuelos.backend.model.enums.Role;
 import com.gutierrez.reserva_vuelos.backend.model.enums.SeatType;
 import com.gutierrez.reserva_vuelos.backend.respository.*;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -17,22 +19,28 @@ public class DataBaseSeeder implements CommandLineRunner {
 
   private final AirportRepository airportRepository;
   private final AirlineRepository airlineRepository;
+  private final UserRepository userRepository;
   private final PassengerRepository passengerRepository;
   private final FlightRepository flightRepository;
   private final BookingRepository bookingRepository;
+  private final PasswordEncoder passwordEncoder;
 
   public DataBaseSeeder(
           AirportRepository airportRepository,
           AirlineRepository airlineRepository,
+          UserRepository userRepository,
           PassengerRepository passengerRepository,
           FlightRepository flightRepository,
-          BookingRepository bookingRepository
+          BookingRepository bookingRepository,
+          PasswordEncoder passwordEncoder
   ) {
     this.airportRepository = airportRepository;
     this.airlineRepository = airlineRepository;
+    this.userRepository = userRepository;
     this.passengerRepository = passengerRepository;
     this.flightRepository = flightRepository;
     this.bookingRepository = bookingRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   @Override
@@ -142,33 +150,30 @@ public class DataBaseSeeder implements CommandLineRunner {
     ));
 
     // =========================
-    // PASSENGERS
+    // USERS + PASSENGERS
     // =========================
 
-    Passenger juan = new Passenger();
-    juan.setFirstname("Juan");
-    juan.setLastname("Perez");
-    juan.setEmail("juan.perez@email.com");
+    User juanUser = createUser("Juan", "Perez", "juan.perez@email.com");
+    User mariaUser = createUser("Maria", "Gomez", "maria.gomez@email.com");
+    User carlosUser = createUser("Carlos", "Rodriguez", "carlos.rodriguez@email.com");
+    User anaUser = createUser("Ana", "Fernandez", "ana.fernandez@email.com");
+    User lucasUser = createUser("Lucas", "Martinez", "lucas.martinez@email.com");
+    User admin = createAdmin("Admin", "Admin", "admin.admin@email.com");
 
-    Passenger maria = new Passenger();
-    maria.setFirstname("Maria");
-    maria.setLastname("Gomez");
-    maria.setEmail("maria.gomez@email.com");
+    userRepository.saveAll(List.of(
+            juanUser,
+            mariaUser,
+            carlosUser,
+            anaUser,
+            lucasUser,
+            admin
+    ));
 
-    Passenger carlos = new Passenger();
-    carlos.setFirstname("Carlos");
-    carlos.setLastname("Rodriguez");
-    carlos.setEmail("carlos.rodriguez@email.com");
-
-    Passenger ana = new Passenger();
-    ana.setFirstname("Ana");
-    ana.setLastname("Fernandez");
-    ana.setEmail("ana.fernandez@email.com");
-
-    Passenger lucas = new Passenger();
-    lucas.setFirstname("Lucas");
-    lucas.setLastname("Martinez");
-    lucas.setEmail("lucas.martinez@email.com");
+    Passenger juan   = createPassenger("Juan",   "Pérez",     "juan.perez@gmail.com",       28123456);
+    Passenger maria  = createPassenger("María",  "González",  "maria.gonzalez@hotmail.com", 30987654);
+    Passenger carlos = createPassenger("Carlos", "Rodríguez", "carlos.rodriguez@gmail.com", 22456789);
+    Passenger ana    = createPassenger("Ana",    "Fernández", "ana.fernandez@outlook.com",  35111222);
+    Passenger lucas  = createPassenger("Lucas",  "Martínez",  "lucas.martinez@gmail.com",   40333444);
 
     passengerRepository.saveAll(List.of(
             juan,
@@ -335,6 +340,41 @@ public class DataBaseSeeder implements CommandLineRunner {
             booking7,
             booking8
     ));
+  }
+
+  private User createUser(String firstname, String lastname, String email) {
+    User user = new User();
+
+    user.setFirstname(firstname);
+    user.setLastname(lastname);
+    user.setEmail(email);
+    user.setPassword(passwordEncoder.encode("password123"));
+    user.setRole(Role.USER);
+
+    return user;
+  }
+  private User createAdmin(String firstname, String lastname, String email) {
+    User user = new User();
+
+    user.setFirstname(firstname);
+    user.setLastname(lastname);
+    user.setEmail(email);
+    user.setPassword(passwordEncoder.encode("password123"));
+    user.setRole(Role.ADMIN);
+
+    return user;
+  }
+
+    private Passenger createPassenger(String firstname, String lastname, String email, int dni) {
+    Passenger passenger = new Passenger();
+    passenger.setFirstname(firstname);
+    passenger.setLastname(lastname);
+    passenger.setEmail(email);
+    passenger.setDni(dni);
+    passenger.setPassword(passwordEncoder.encode("password123"));
+    passenger.setRole(Role.USER);
+
+    return passenger;
   }
 
   private Flight createFlight(

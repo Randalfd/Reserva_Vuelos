@@ -5,7 +5,9 @@ import com.gutierrez.reserva_vuelos.backend.model.dto.AuthResponseDto;
 import com.gutierrez.reserva_vuelos.backend.model.dto.LoginRequestDto;
 import com.gutierrez.reserva_vuelos.backend.model.dto.RegisterRequestDto;
 import com.gutierrez.reserva_vuelos.backend.model.entity.User;
+import com.gutierrez.reserva_vuelos.backend.model.enums.Role;
 import com.gutierrez.reserva_vuelos.backend.respository.UserRepository;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AuthService {
 
   private final AuthenticationManager authManager;
@@ -44,9 +46,12 @@ public class AuthService {
 
   public AuthResponseDto register(RegisterRequestDto request) {
     if (userRepository.findByEmail(request.email()).isPresent()) {
-      throw new IllegalArgumentException("Email Alredy Registered");
+      throw new IllegalArgumentException("Email Already Registered");
     }
     User user = userMapper.userRegisterRequestToUser(request);
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    user.setRole(Role.USER);
+
     userRepository.save(user);
 
     UserDetails userDetails = userDetailsService.loadUserByUsername(request.email());

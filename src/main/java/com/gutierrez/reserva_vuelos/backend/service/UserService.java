@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface UserService extends UserDetailsService {
   List<UserResponseDto> findAllUsers();
-  UserResponseDto findUserById();
+  UserResponseDto findUserById(Long id);
+  UserResponseDto findUserByEmail(String email);
 }
