@@ -42,7 +42,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/auth/login").permitAll()
                     .requestMatchers("/error").permitAll()
                     // ADMIN Endpoints
-                    .requestMatchers("/actuator").hasRole("ADMIN")
+                    .requestMatchers("/api/actuator/**").hasRole("ADMIN")
                     .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
