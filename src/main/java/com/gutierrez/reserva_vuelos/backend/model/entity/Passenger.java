@@ -1,22 +1,21 @@
 package com.gutierrez.reserva_vuelos.backend.model.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "passengers")
+@PrimaryKeyJoinColumn(name = "id")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Passenger {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String firstname;
-    private String lastname;
-    private String email;
+@SuperBuilder
+public class Passenger extends User {
+    @NotNull
+    private int dni;
 }

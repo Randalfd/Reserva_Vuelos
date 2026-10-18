@@ -36,7 +36,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/passenger/1",
+              "raw": "http://localhost:8080/api/passenger/8",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -45,7 +45,7 @@
               "path": [
                 "api",
                 "passenger",
-                "1"
+                "8"
               ]
             }
           },
@@ -58,7 +58,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "// REGLAS\n// No nulos y no vacios\n// El email debe ser un email\n{\n    \"firstname\": \"Santiago\",\n    \"lastname\": \"Gutierr3z\",\n    \"email\": \"test@test.com\" // falla con \"test\", \"test@\", etc.\n}\n",
+              "raw": "// REGLAS\n// No nulos y no vacios\n// El email debe ser un email\n{\n    \"firstname\": \"Santiago\",\n    \"lastname\": \"Gutierr3z\",\n    \"email\": \"test@test.com\",\n    \"password\": \"password123\",\n    \"dni\": \"250000\" // falla con \"test\", \"test@\", etc.\n}\n",
               "options": {
                 "raw": {
                   "language": "json"
@@ -116,7 +116,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/passenger/1",
+              "raw": "http://localhost:8080/api/passenger/7",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -125,7 +125,29 @@
               "path": [
                 "api",
                 "passenger",
-                "1"
+                "7"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "findByFirstNameLike",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/passenger/findByNameLike/Lucas",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "passenger",
+                "findByNameLike",
+                "Lucas"
               ]
             }
           },
@@ -184,7 +206,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "// REGLAS\n// Generar al menos dos entidades\n// No nulos y no vacios\n\n{\n    \"airport_name\": \"Aeroparque\",\n    \"ICAO\": \"AEP\",\n    \"address\": \"test 123\",\n    \"city\": \"Buenos Aires\"\n}\n/* Datos para la segunda entidad, remplazar con el objeto superior\n   \"airport_name\": \"Ezeiza\",\n    \"ICAO\": \"EZE\",\n    \"address\": \"test 321\",\n    \"city\": \"Buenos Aires\"}\n*/",
+              "raw": "// REGLAS\n// Generar al menos dos entidades\n// No nulos y no vacios\n\n{\n   \"airport_name\": \"Ezeiza\",\n    \"ICAO\": \"EZE\",\n    \"address\": \"test 321\",\n    \"city\": \"Buenos Aires\"\n}\n/* Datos para la segunda entidad, remplazar con el objeto superior\n    \"airport_name\": \"Aeroparque\",\n    \"ICAO\": \"AEP\",\n    \"address\": \"test 123\",\n    \"city\": \"Buenos Aires\"\n*/",
               "options": {
                 "raw": {
                   "language": "json"
@@ -242,7 +264,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/airport/1",
+              "raw": "http://localhost:8080/api/airport/5",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -251,7 +273,7 @@
               "path": [
                 "api",
                 "airport",
-                "1"
+                "5"
               ]
             }
           },
@@ -368,7 +390,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/airline/5",
+              "raw": "http://localhost:8080/api/airline/2",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -377,7 +399,7 @@
               "path": [
                 "api",
                 "airline",
-                "5"
+                "2"
               ]
             }
           },
@@ -436,7 +458,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "// REGLAS\n// No nulos y no vacios\n// price debe ser mayor o igual a 0\n// deperture y arrival no pueden ser en el pasado\n// Los campos foraneos deben estar registrados\n{\n    \"originAirportId\": 1,\n    \"destinationAirportId\": 2,\n    \"price\": 10000,\n    \"departure\": \"2026-10-10\", // TODO: Modificar respuesta http en fallos\n    \"arrival\": \"2026-10-10\",  // TODO: Modificar respuesta http en fallos\n    \"airlineId\": 1\n}",
+              "raw": "// REGLAS\n// No nulos y no vacios\n// price debe ser mayor o igual a 0\n// deperture y arrival no pueden ser en el pasado\n// Los campos foraneos deben estar registrados\n{\n    \"originAirportId\": 1,\n    \"destinationAirportId\": 1,\n    \"price\": 10000,\n    \"departure\": \"2026-12-10\", // TODO: Modificar respuesta http en fallos\n    \"arrival\": \"2026-12-10\", // TODO: Modificar respuesta http en fallos\n    \"airlineId\": 1\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -465,7 +487,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"originAirportId\": 1,\n    \"destinationAirportId\": 2,\n    \"price\": 100000,\n    \"departure\": \"2026-10-10\",\n    \"arrival\": \"2026-10-10\",\n    \"airlineId\": 1\n}",
+              "raw": "{\n    \"originAirportId\": 1,\n    \"destinationAirportId\": 2,\n    \"price\": 100000,\n    \"departure\": \"2026-12-10\",\n    \"arrival\": \"2026-12-10\",\n    \"airlineId\": 1\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -494,7 +516,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:8080/api/flight/2",
+              "raw": "http://localhost:8080/api/flight/7",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -503,7 +525,7 @@
               "path": [
                 "api",
                 "flight",
-                "2"
+                "7"
               ]
             }
           },
@@ -532,6 +554,72 @@
                 "api",
                 "flight",
                 "sort"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "FindByDepartureBetween",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/flight/findByDepartureBetween?departureFrom=2026-10-01&departureTo=2026-10-30&index=0",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "flight",
+                "findByDepartureBetween"
+              ],
+              "query": [
+                {
+                  "key": "departureFrom",
+                  "value": "2026-10-01"
+                },
+                {
+                  "key": "departureTo",
+                  "value": "2026-10-30"
+                },
+                {
+                  "key": "index",
+                  "value": "0"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "FindByArrivalAfter",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/flight/findByArrivalAfter?arrival=2026-10-15&index=0",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "flight",
+                "findByArrivalAfter"
+              ],
+              "query": [
+                {
+                  "key": "arrival",
+                  "value": "2026-10-15"
+                },
+                {
+                  "key": "index",
+                  "value": "0"
+                }
               ]
             }
           },
@@ -590,7 +678,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "// REGLAS\n// No nulos\n// Los campos foraneos deben estar registrados\n// status debe estar dentro de: Pending, Confirmed, Cancelled, Reserved. Case-Sensitive\n// status debe estar dentro de: Economic, Business, Premium, Vip. Case-Sensitive\n{\n    \"passengerId\": 1,\n    \"flightId\": 1,\n    \"status\": \"Pending\", // TODO: Modificar respuesta http en fallos\n    \"seatType\": \"Business\" // TODO: Modificar respuesta http en fallos\n}",
+              "raw": "// REGLAS\n// No nulos\n// Los campos foraneos deben estar registrados\n// status debe estar dentro de: PENDING, CONFIRMED, CANCELLED, RESERVED. Case-Sensitive\n// status debe estar dentro de: ECONOMIC, BUSINESS, FIRST, VIP. Case-Sensitive\n{\n    \"passengerId\": 1,\n    \"flightId\": 1,\n    \"status\": \"Pending\", // TODO: Modificar respuesta http en fallos\n    \"seatType\": \"Business\" // TODO: Modificar respuesta http en fallos\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -683,8 +771,183 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "findCancelledBookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/booking/findCancelledBookings",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "booking",
+                "findCancelledBookings"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "countPassengerBookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/booking/countPassengerBookings",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "booking",
+                "countPassengerBookings"
+              ]
+            }
+          },
+          "response": []
         }
       ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "login Administrador",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\n\npm.test(\"Login exitoso\", () => {\n    pm.response.to.have.status(200);\n    pm.expect(response.token).to.be.a(\"string\").and.not.empty;\n});\n\npm.collectionVariables.set(\"jwt_token\", response.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"admin.admin@email.com\",\n    \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "login usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const response = pm.response.json();\n\npm.test(\"Login exitoso\", () => {\n    pm.response.to.have.status(200);\n    pm.expect(response.token).to.be.a(\"string\").and.not.empty;\n});\n\npm.collectionVariables.set(\"jwt_token\", response.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"juan.perez@email.com\",\n    \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstname\": \"santiago\",\n    \"lastname\": \"gutierrez\",\n    \"email\": \"santiagogutierrez3@gmail.com\",\n    \"password\": \"12345678\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/api/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "jwt_token",
+      "value": ""
     }
   ]
 }

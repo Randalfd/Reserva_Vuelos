@@ -7,11 +7,11 @@ Aplicación backend para la reserva de vuelos construida con **Java 21** y **Spr
 La aplicación usa **PostgreSQL** como base de datos. La configuración se inyecta por
 variables de entorno (ver `src/main/resources/application.properties`):
 
-| Variable            | Default                                  | Descripción                  |
-| ------------------- | ---------------------------------------- | ---------------------------- |
-| `DATABASE_URL`      | `jdbc:postgresql://localhost:5432/postgres` | JDBC URL de PostgreSQL   |
-| `DATABASE_USER`     | `postgres`                               | Usuario de la base de datos  |
-| `DATABASE_PASSWORD` | `reserva_vuelos_321`                     | Password de la base de datos |
+| Variable            | Default                                     | Descripción                  |
+| ------------------- | ------------------------------------------- | ---------------------------- |
+| `DATABASE_URL`      | `jdbc:postgresql://localhost:5432/postgres` | JDBC URL de PostgreSQL       |
+| `DATABASE_USER`     | `postgres`                                  | Usuario de la base de datos  |
+| `DATABASE_PASSWORD` | `reserva_vuelos_321`                        | Password de la base de datos |
 
 Las tres tienen valor por defecto (sintaxis `${VARIABLE:default}`), así que la aplicación
 arranca sin definir nada. Solo debes exportarlas cuando quieras apuntar a otra base de
@@ -73,6 +73,7 @@ mvn spring-boot:run
 > Si el proyecto no inicia y hay problemas de dependencias ejecutar `mvn clean package`.
 
 ### Opción 3: Intellij
+
 Cargar la raiz del proyecto y compilar desde la propia herramienta.
 Requiere tener DB cargada para ejecutar con datos mencionados;
 
@@ -117,11 +118,11 @@ Representa un aeropuerto.
 Representa una aerolínea. La relación con `Airport`.
 
 | Campo         | Tipo          | Descripción                                       |
-|---------------|---------------|---------------------------------------------------|
+| ------------- | ------------- | ------------------------------------------------- |
 | `id`          | Long          | Identificador único                               |
 | `name`        | String        | Nombre (requerido)                                |
 | `mainAirport` | Airport       | Aeropuerto principal (relación)                   |
-| `airports` | List<Airport> | Lista de aeropuertos con el que trabaja(relación) |
+| `airports`    | List<Airport> | Lista de aeropuertos con el que trabaja(relación) |
 | `email`       | String        | Email de contacto (requerido)                     |
 | `phone`       | String        | Teléfono                                          |
 
@@ -154,10 +155,10 @@ Representa un pasajero.
 
 Representa la reserva de un vuelo por parte de un pasajero.
 
-| Campo       | Tipo          | Descripción                                               |
-| ----------- | ------------- |-----------------------------------------------------------|
-| `id`        | Long          | Identificador único                                       |
-| `passenger` | Passenger     | Pasajero que reserva (relación)                           |
-| `flight`    | Flight        | Vuelo reservado (relación)                                |
-| `status`    | BookingStatus | Estado: `PENDING`, `CONFIRMED`, `CANCELLED`, `RESERVED`   |
+| Campo       | Tipo          | Descripción                                             |
+| ----------- | ------------- | ------------------------------------------------------- |
+| `id`        | Long          | Identificador único                                     |
+| `passenger` | Passenger     | Pasajero que reserva (relación)                         |
+| `flight`    | Flight        | Vuelo reservado (relación)                              |
+| `status`    | BookingStatus | Estado: `PENDING`, `CONFIRMED`, `CANCELLED`, `RESERVED` |
 | `seatType`  | SeatType      | Tipo de asiento: `ECONOMIC`, `BUSINESS`, `FIRST`, `VIP` |
