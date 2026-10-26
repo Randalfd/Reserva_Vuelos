@@ -30,7 +30,7 @@ public class AirlineServiceImpl implements AirlineService {
 
   @Override
   public List<AirlineResponseDto> findAllAirlines() {
-    return airlineRepository.findAll()
+    return airlineRepository.findAllWithAirports()
             .stream()
             .map(airlineMapper::airlineToAirlineResponseDto)
             .toList();

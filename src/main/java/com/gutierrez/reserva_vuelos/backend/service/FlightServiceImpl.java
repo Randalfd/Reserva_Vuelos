@@ -11,6 +11,9 @@ import com.gutierrez.reserva_vuelos.backend.respository.AirlineRepository;
 import com.gutierrez.reserva_vuelos.backend.respository.AirportRepository;
 import com.gutierrez.reserva_vuelos.backend.respository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,8 +39,9 @@ public class FlightServiceImpl implements FlightService {
   AirlineRepository airlineRepository;
 
   @Override
+  @Cacheable(cacheNames = "airlines", key = "'all'")
   public List<FlightResponseDto> findAllFlights() {
-    return flightRepository.findAll().
+    return flightRepository.findAllWithRelations().
             stream().
             map(flightMapper::flightToFlightResponseDto).
             toList();
@@ -69,6 +73,7 @@ public class FlightServiceImpl implements FlightService {
     return flightMapper.flightToFlightResponseDto(flightRepository.save(flight));
   }
 
+  @CacheEvict(cacheNames = "airlines", key = "'all'")
   @Override
   public FlightResponseDto updateFlight(FlightRequestDto flightRequestDto, Long id) throws ResourceNotFoundException {
     Flight savedFlight = flightRepository.findById(id).
@@ -102,6 +107,7 @@ public class FlightServiceImpl implements FlightService {
     return flightMapper.flightToFlightResponseDto(flightRepository.save(savedFlight));
   }
 
+  @CacheEvict(cacheNames = "airlines", key = "'all'")
   @Override
   public void removeFlight(Long id) throws ResourceNotFoundException {
     flightRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Flight Not Found"));

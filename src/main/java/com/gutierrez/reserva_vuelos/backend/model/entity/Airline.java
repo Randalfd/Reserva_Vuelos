@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.Set;
 
@@ -26,7 +28,7 @@ public class Airline {
     @ManyToOne
     @JoinColumn(name = "airport_id")
     private Airport mainAirport;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "airline_airports",
             joinColumns = @JoinColumn(name = "airline_id"),

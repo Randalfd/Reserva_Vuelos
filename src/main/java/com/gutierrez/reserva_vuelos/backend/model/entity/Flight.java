@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDate;
 
@@ -14,6 +15,27 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
+@NamedEntityGraph(
+        name = "flight-with-relations",
+        attributeNodes = {
+                @NamedAttributeNode("originAirport"),
+                @NamedAttributeNode("destinationAirport"),
+                @NamedAttributeNode(
+                        value = "airline",
+                        subgraph = "airline-airports"
+                ),
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "airline-airports",
+                        attributeNodes = {
+                                @NamedAttributeNode("mainAirport"),
+                                @NamedAttributeNode("airports")
+                        }
+                )
+        }
+)
 public class Flight {
    @Id
    @GeneratedValue(strategy = GenerationType.AUTO)
